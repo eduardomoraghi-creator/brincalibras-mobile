@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "brincalibras",
+    "slug": "brincalibras-sprint1",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "brincalibras",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.brincalibras.app"    },
+    "web": {
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "da4f67a7-0c5f-4b86-814a-5db7207ddaaa"
+      }
+    },
+    "owner": "moraghi"
+  }
+}
