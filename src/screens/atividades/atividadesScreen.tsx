@@ -1,7 +1,10 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 export default function AtividadesScreen() {
+
+  const router = useRouter();
 
   const abrirAtividade = (nome: string) => {
     alert(`Abrindo ${nome}...`);
@@ -46,6 +49,16 @@ export default function AtividadesScreen() {
         <Text style={styles.cardDesc}>
           Monte frases completas em Libras
         </Text>
+      </TouchableOpacity>
+
+      {/* Atividade 8 - Família */}
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => router.push('/familia')}
+      >
+        <MaterialIcons name="people" size={40} color="#43A047" />
+        <Text style={styles.cardTitulo}>Família</Text>
+        <Text style={styles.cardDesc}>Sinais sobre membros da família</Text>
       </TouchableOpacity>
 
     </View>
