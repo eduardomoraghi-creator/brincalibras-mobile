@@ -1,8 +1,10 @@
 {
   "expo": {
-    "name": "brincalibras",
+    "name": "BrincaLibras",
     "slug": "brincalibras-sprint1",
     "version": "1.0.0",
+        "icon": "./assets/images/icon.png", 
+
     "orientation": "portrait",
     "scheme": "brincalibras",
     "userInterfaceStyle": "automatic",
