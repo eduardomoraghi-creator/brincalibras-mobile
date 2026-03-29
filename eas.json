@@ -15,14 +15,14 @@
       }
     },
     "production": {
-  "autoIncrement": true,
-  "android": {
-    "buildType": "apk"
-  },
-  "env": {
-    "API_URL": "https://brincalibras-api.onrender.com"
-  }
-}
+      "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "API_URL": "https://brincalibras-api.onrender.com" 
+      }
+    }
   },
   "submit": {
     "production": {}

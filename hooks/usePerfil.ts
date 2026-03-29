@@ -1,8 +1,8 @@
+// hooks/usePerfil.ts
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// 🔹 Tipo do Usuário
-type Usuario = {
+export type Usuario = {
   id: string;
   nome: string;
   email: string;
@@ -15,14 +15,12 @@ export function usePerfil() {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
 
-  // URL da API na nuvem (Render + Neon)
   const API_URL = 'https://brincalibras-api.onrender.com/users';
 
   useEffect(() => {
     carregarUsuario();
   }, []);
 
-  // 🔹 Carrega usuário do AsyncStorage e API
   const carregarUsuario = async () => {
     try {
       setLoading(true);
@@ -37,27 +35,23 @@ export function usePerfil() {
 
       const user: Usuario = JSON.parse(userStorage);
 
-      // 🔹 Busca do usuário direto na nuvem
       const response = await fetch(`${API_URL}/${user.id}`);
-      if (!response.ok) throw new Error('Erro ao buscar usuário na nuvem');
+      if (!response.ok) throw new Error('Erro ao buscar usuário');
 
       const data: Usuario = await response.json();
 
-      // Atualiza estados
       setUsuario(data);
-      setNome(data.nome || '');
-      setEmail(data.email || '');
-
+      setNome(data.nome ?? '');
+      setEmail(data.email ?? '');
     } catch (e) {
-      setErro('Erro ao carregar perfil da nuvem');
+      setErro('Erro ao carregar perfil');
       console.error(e);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Salva alterações do perfil na nuvem
-  const salvar = async () => {
+  const salvar = async (novaSenha?: string) => {
     if (!usuario) {
       setErro('Nenhum usuário logado');
       return;
@@ -67,33 +61,31 @@ export function usePerfil() {
       setLoading(true);
       setErro('');
 
+      const body: any = { nome, email };
+
+      // envia senha somente se foi informada
+      if (novaSenha && novaSenha.length >= 6) {
+        body.senha = novaSenha;
+      }
+
       const response = await fetch(`${API_URL}/${usuario.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, email }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) throw new Error('Erro ao atualizar perfil');
 
-      alert('Perfil atualizado com sucesso!');
+      // atualiza estado local
       setUsuario({ ...usuario, nome, email });
-
+      alert('Perfil atualizado com sucesso!');
     } catch (e) {
-      setErro('Erro ao atualizar perfil na nuvem');
+      setErro('Erro ao atualizar perfil');
       console.error(e);
     } finally {
       setLoading(false);
     }
   };
 
-  return {
-    usuario,
-    nome,
-    setNome,
-    email,
-    setEmail,
-    loading,
-    erro,
-    salvar,
-  };
+  return { usuario, nome, setNome, email, setEmail, loading, erro, salvar };
 }

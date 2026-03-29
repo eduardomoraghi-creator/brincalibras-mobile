@@ -14,7 +14,6 @@ import { useRouter } from 'expo-router';
 import { useSuporte } from '../../hooks/useSuporte';
 
 export default function SuporteScreen() {
-
   const router = useRouter();
   const {
     email,
@@ -35,11 +34,20 @@ export default function SuporteScreen() {
 
   const theme = darkMode ? stylesDark : stylesLight;
 
+  // Função segura para voltar
+  const handleVoltar = () => {
+    try {
+      router.back();
+    } catch {
+      router.push('/footer/home'); // rota segura se não houver histórico
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.background }]}>
       {/* 🔥 HEADER PADRÃO */}
       <View style={[styles.header, { backgroundColor: theme.header }]}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={handleVoltar}>
           <Ionicons name="arrow-back" size={26} color={theme.text} />
         </TouchableOpacity>
 
