@@ -1,15 +1,17 @@
 // app/login.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { InputAnimado } from '../src/components/InputAnimado';
 import { useLogin } from '../hooks/useLogin';
 import LoginLayout from '../src/components/loginLayout';
+import { useTheme } from '../src/contexts/themeContext';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { theme } = useTheme(); // cores dinâmicas
 
   const {
     email, setEmail,
@@ -23,13 +25,20 @@ export default function LoginScreen() {
     animateFocus
   } = useLogin(); 
 
-  const darkMode = false;
-  const theme = darkMode ? stylesDark : stylesLight;
-
   return (
     <LoginLayout>
-      {/* HEADER */}
-      <View style={[styles.header, { backgroundColor: theme.header }]}>
+      {/* HEADER baseado no Home, sem seta de voltar */}
+      <View style={[styles.header, { backgroundColor: theme.background }]}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../assets/images/homeLight/mao.png')}
+            style={styles.logoMao}
+          />
+          <Image
+            source={require('../assets/images/homeLight/BrincaLibras.png')}
+            style={styles.logoTexto}
+          />
+        </View>
         <Text style={[styles.title, { color: theme.text }]}>Login</Text>
       </View>
 
@@ -93,22 +102,21 @@ export default function LoginScreen() {
 
           {erroGeral && <Text style={styles.msgErro}>{erroGeral}</Text>}
 
-          {/* BOTÃO ENTRAR */}
+          {/* BOTÕES */}
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: theme.button }]}
+            style={[styles.button, { backgroundColor: theme.primary }]}
             onPress={validarESubmeter}
           >
-            <Text style={[styles.buttonText, { color: theme.buttonText }]}>
+            <Text style={[styles.buttonText, { color: theme.text }]}>
               Entrar
             </Text>
           </TouchableOpacity>
 
-          {/* BOTÃO "NÃO TENHO CADASTRO" */}
           <TouchableOpacity
             style={[styles.button, styles.buttonSecondary]}
             onPress={() => router.push('/cadastro')}
           >
-            <Text style={[styles.buttonText, { color: theme.buttonText }]}>
+            <Text style={[styles.buttonText, { color: theme.text }]}>
               Não tenho cadastro
             </Text>
           </TouchableOpacity>
@@ -118,27 +126,22 @@ export default function LoginScreen() {
   );
 }
 
-/* TEMAS */
-const stylesLight = {
-  background: '#FFFFFF',
-  header: '#3A8FB7',
-  text: '#000',
-  button: '#000',
-  buttonText: '#FFF'
-};
-
-const stylesDark = {
-  background: '#2C2C2C',
-  header: '#3A8FB7',
-  text: '#FFF',
-  button: '#BB86FC',
-  buttonText: '#000'
-};
-
-/* STYLES */
 const styles = StyleSheet.create({
-  header: { paddingTop: 55, paddingBottom: 25, paddingHorizontal: 20, borderBottomLeftRadius: 25, borderBottomRightRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
-  title: { fontSize: 22, fontWeight: 'bold' },
+  header: {
+    paddingTop: 45,
+    paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoMao: { width: 60, height: 60, resizeMode: 'contain', marginRight: 10 },
+  logoTexto: { width: 180, height: 60, resizeMode: 'contain' },
+  title: { fontSize: 30, fontWeight: 'bold', marginTop: 10 },
+
   content: { padding: 20, paddingBottom: 40 },
   socialContainer: { borderWidth: 1, borderColor: '#ddd', borderRadius: 15, padding: 20, alignItems: 'center', marginBottom: 20 },
   socialText: { marginBottom: 15, fontWeight: '600' },

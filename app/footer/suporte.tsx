@@ -1,17 +1,18 @@
-import React from 'react';
+// app/footer/suporte.tsx
+import React from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   ScrollView,
-  StyleSheet
-} from 'react-native';
-import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-
-// 🔥 HOOK
-import { useSuporte } from '../../hooks/useSuporte';
+  StyleSheet,
+  Image,
+} from "react-native";
+import { Ionicons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { useTheme } from "../../src/contexts/themeContext";
+import { useSuporte } from "../../hooks/useSuporte";
 
 export default function SuporteScreen() {
   const router = useRouter();
@@ -29,39 +30,78 @@ export default function SuporteScreen() {
     voltarFAQ,
     busca,
     setBusca,
-    navegarPorBusca
   } = useSuporte();
 
-  const theme = darkMode ? stylesDark : stylesLight;
+  const { theme } = useTheme();
 
-  // Função segura para voltar
   const handleVoltar = () => {
     try {
       router.back();
     } catch {
-      router.push('/footer/home'); // rota segura se não houver histórico
+      router.push("/footer/home");
     }
   };
 
-  return (
-    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.background }]}>
-      {/* 🔥 HEADER PADRÃO */}
-      <View style={[styles.header, { backgroundColor: theme.header }]}>
-        <TouchableOpacity onPress={handleVoltar}>
-          <Ionicons name="arrow-back" size={26} color={theme.text} />
-        </TouchableOpacity>
+  // 🔹 mapa de palavras-chave → telas
+const palavrasPorRota = {
+  "/footer/jogos": ["game", "games", "jogos"],
+  "/footer/atividades": ["atividade", "atividades"],
+  "/footer/perfil": ["perfil"],
+  "/footer/suporte": ["suporte"],
+  "/footer/dicionario": ["dicionario", "letra", "palavra", "abecedario"],
+} as const;
 
-        <Text style={[styles.title, { color: theme.text }]}>Suporte</Text>
+type RotaValida = keyof typeof palavrasPorRota; // tipos literais das rotas
+
+// 🔹 construindo mapa de palavras → rota
+const rotas: Record<string, RotaValida> = {};
+Object.entries(palavrasPorRota).forEach(([rota, palavras]) => {
+  palavras.forEach((palavra) => {
+    rotas[palavra.toLowerCase()] = rota as RotaValida; // ✅ garante que é literal
+  });
+});
+
+// 🔹 função de navegação
+const navegarPorBusca = () => {
+  if (!busca) return;
+  const termo = busca.toLowerCase();
+  const rotaEncontrada = rotas[termo];
+  if (rotaEncontrada) {
+    router.push(rotaEncontrada); // ✅ TypeScript agora aceita
+  } else {
+    alert("Nenhuma tela encontrada para esta busca.");
+  }
+};
+  return (
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: theme.background },
+      ]}
+    >
+      {/* HEADER */}
+      <View style={[styles.header, { backgroundColor: theme.background }]}>
+        <TouchableOpacity onPress={handleVoltar}>
+        </TouchableOpacity>
 
         <View style={{ width: 26 }} />
       </View>
 
-      {/* 🔥 BUSCA */}
-      <View style={[styles.searchBox, { backgroundColor: theme.search }]}>
+      {/* BUSCA */}
+      <View
+        style={[
+          styles.searchBox,
+          {
+            backgroundColor: theme.background,
+            borderColor: theme.text,
+            borderWidth: 1,
+          },
+        ]}
+      >
         <Ionicons name="search" size={20} color="#8E8E8E" />
         <TextInput
           style={[styles.searchInput, { color: theme.text }]}
-          placeholder="Ex: perfil, jogos, atividades..."
+          placeholder="Ex: perfil, jogos, atividades, dicionário..."
           placeholderTextColor="#8E8E8E"
           value={busca}
           onChangeText={setBusca}
@@ -70,6 +110,7 @@ export default function SuporteScreen() {
         />
       </View>
 
+      {/* CONTEÚDO */}
       {perguntaSelecionada ? (
         <View style={[styles.card, { backgroundColor: theme.card }]}>
           <Text style={[styles.cardTitle, { color: theme.primary }]}>
@@ -92,34 +133,32 @@ export default function SuporteScreen() {
 
           <View style={styles.row}>
             <TouchableOpacity
-              style={[styles.contatoBtn, { backgroundColor: theme.button }]}
+              style={[styles.contatoBtn, styles.linkBtn]}
               onPress={abrirWhatsApp}
             >
-              <FontAwesome name="whatsapp" size={18} color={theme.icon} />
-              <Text style={[styles.contatoText, { color: theme.icon }]}>
+              <FontAwesome name="whatsapp" size={18} color="#FFF" />
+              <Text style={[styles.contatoText, { color: "#FFF" }]}>
                 (11) 11111-1111
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.contatoBtn, { backgroundColor: theme.button }]}
+              style={[styles.contatoBtn, styles.linkBtn]}
               onPress={ligar}
             >
-              <MaterialIcons name="phone" size={18} color={theme.icon} />
-              <Text style={[styles.contatoText, { color: theme.icon }]}>
+              <MaterialIcons name="phone" size={18} color="#FFF" />
+              <Text style={[styles.contatoText, { color: "#FFF" }]}>
                 (11) 11111-1111
               </Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            style={[styles.contatoBtn, styles.emailBtn, { backgroundColor: theme.button }]}
+            style={[styles.contatoBtn, styles.linkBtn, styles.emailBtn]}
             onPress={enviarEmail}
           >
-            <MaterialIcons name="email" size={18} color={theme.icon} />
-            <Text style={[styles.contatoText, { color: theme.icon }]}>
-              {email}
-            </Text>
+            <MaterialIcons name="email" size={18} color="#FFF" />
+            <Text style={[styles.contatoText, { color: "#FFF" }]}>{email}</Text>
           </TouchableOpacity>
 
           <View style={[styles.card, { backgroundColor: theme.card }]}>
@@ -134,7 +173,9 @@ export default function SuporteScreen() {
                     {item.pergunta}
                   </Text>
                 </TouchableOpacity>
-                <View style={[styles.divider, { backgroundColor: theme.primary }]} />
+                <View
+                  style={[styles.divider, { backgroundColor: theme.primary }]}
+                />
               </View>
             ))}
 
@@ -152,62 +193,43 @@ export default function SuporteScreen() {
   );
 }
 
-/* 🔥 TEMAS */
-const stylesLight = {
-  background: '#FFFFFF',
-  header: '#3A8FB7',
-  search: '#E6E6E6',
-  text: '#000000',
-  button: '#000',
-  icon: '#FFF',
-  card: '#FFF',
-  primary: '#3A8FB7'
-};
-
-const stylesDark = {
-  background: '#2C2C2C',
-  header: '#3A8FB7',
-  search: '#555',
-  text: '#FFF',
-  button: '#3A8FB7',
-  icon: '#FFF',
-  card: '#444',
-  primary: '#FFF'
-};
-
-/* 🔥 ESTILOS */
+/* ESTILOS */
 const styles = StyleSheet.create({
   container: { flexGrow: 1 },
   header: {
-    paddingTop: 55,
-    paddingBottom: 25,
+    paddingTop: 45,
+    paddingBottom: 15,
     paddingHorizontal: 20,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  title: { fontSize: 22, fontWeight: 'bold' },
+  logoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   searchBox: {
     margin: 20,
     borderRadius: 30,
     paddingHorizontal: 15,
     height: 45,
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
   },
   searchInput: { marginLeft: 10, flex: 1 },
-  content: { paddingHorizontal: 20, paddingBottom: 40 },
-  subTitle: { textAlign: 'center', marginBottom: 15, fontWeight: '600' },
-  row: { flexDirection: 'row', justifyContent: 'center', gap: 10, marginBottom: 10 },
-  contatoBtn: { flexDirection: 'row', alignItems: 'center', padding: 10, borderRadius: 25, gap: 8 },
+  subTitle: { textAlign: "center", marginBottom: 15, fontWeight: "600" },
+  row: { flexDirection: "row", justifyContent: "center", gap: 10, marginBottom: 10 },
+  contatoBtn: { flexDirection: "row", alignItems: "center", padding: 10, borderRadius: 25, gap: 8 },
   contatoText: { fontSize: 13 },
-  emailBtn: { alignSelf: 'center', marginBottom: 20 },
+  linkBtn: { backgroundColor: "#000", borderRadius: 50, paddingHorizontal: 15, paddingVertical: 8 },
+  emailBtn: { alignSelf: "center", marginBottom: 20 },
   card: { borderRadius: 20, padding: 15, marginBottom: 15 },
-  cardTitle: { textAlign: 'center', marginBottom: 10, fontWeight: 'bold' },
-  item: { textAlign: 'center', paddingVertical: 10 },
-  resposta: { textAlign: 'center', marginVertical: 15 },
+  cardTitle: { textAlign: "center", marginBottom: 10, fontWeight: "bold" },
+  item: { textAlign: "center", paddingVertical: 10 },
+  resposta: { textAlign: "center", marginVertical: 15 },
   divider: { height: 1, marginHorizontal: 10 },
-  verMais: { textAlign: 'center', marginTop: 10, fontWeight: 'bold' }
+  verMais: { textAlign: "center", marginTop: 10, fontWeight: "bold" },
 });

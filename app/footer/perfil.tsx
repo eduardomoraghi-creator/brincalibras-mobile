@@ -1,4 +1,3 @@
-// app/footer/perfil.tsx
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -12,6 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { usePerfil } from '../../hooks/usePerfil';
 
 export default function PerfilScreen() {
@@ -22,7 +22,7 @@ export default function PerfilScreen() {
   const [confirmaSenha, setConfirmaSenha] = useState('');
   const [erroSenha, setErroSenha] = useState('');
 
-  const theme = stylesLight; // ou dark mode se quiser
+  const theme = stylesLight;
 
   useEffect(() => {
     if (usuario) {
@@ -45,9 +45,19 @@ export default function PerfilScreen() {
       }
     }
 
-    await salvar(senha); // envia nova senha se tiver
+    await salvar(senha || undefined);
     setSenha('');
     setConfirmaSenha('');
+  };
+
+  // Função de logout
+  const sair = async () => {
+    try {
+      await AsyncStorage.clear(); // limpa os dados do usuário
+      router.replace('/login'); // volta para a tela de login
+    } catch (e) {
+      console.log('Erro ao sair:', e);
+    }
   };
 
   return (
@@ -113,6 +123,14 @@ export default function PerfilScreen() {
             >
               <Text style={[styles.buttonText, { color: theme.buttonText }]}>Salvar Alterações</Text>
             </TouchableOpacity>
+
+            {/* Botão Sair */}
+            <TouchableOpacity
+              onPress={sair}
+              style={[styles.button, { backgroundColor: '#E53935' }]}
+            >
+              <Text style={[styles.buttonText, { color: '#FFF' }]}>Sair</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       )}
@@ -123,8 +141,17 @@ export default function PerfilScreen() {
 /* Estilos */
 const styles = StyleSheet.create({
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  header: { paddingTop: 55, paddingBottom: 25, paddingHorizontal: 20, borderBottomLeftRadius: 25, borderBottomRightRadius: 25, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  title: { fontSize: 22, fontWeight: 'bold' },
+  header: {
+    paddingTop: 55,
+    paddingBottom: 25,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  title: { fontSize: 30 },
   content: { paddingTop: 20 },
   label: { marginBottom: 5, fontWeight: '600' },
   input: { borderRadius: 15, padding: 14, marginBottom: 15 },

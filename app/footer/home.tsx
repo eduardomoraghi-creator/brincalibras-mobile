@@ -9,26 +9,18 @@ import {
 } from "react-native";
 
 import { useHome } from "../../hooks/useHome";
+import { useTheme } from "../../src/contexts/themeContext";
 
 export default function HomeScreen() {
   const { irParaJogos, irParaAtividades } = useHome();
+  const { theme } = useTheme(); // para cores dinâmicas caso queira no futuro
 
   return (
-    <View style={styles.container}>
-      {/* HEADER */}
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      {/* HEADER centralizado com MÃO e BRINCALIBRAS */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          {/* MÃO */}
-          <Image
-            source={require("../../assets/images/homeLight/mao.png")}
-            style={styles.logoMao}
-          />
-
-          {/* LOGO BRINCALIBRAS */}
-          <Image
-            source={require("../../assets/images/homeLight/BrincaLibras.png")}
-            style={styles.logoTexto}
-          />
+          
         </View>
       </View>
 
@@ -47,19 +39,17 @@ export default function HomeScreen() {
         </View>
 
         {/* BOTÃO CONFIRA */}
-        <TouchableOpacity style={styles.botaoConfira} activeOpacity={0.8}>
-          <Image
-            source={require("../../assets/images/homeLight/confira.png")}
-            style={styles.imagemBotao}
-          />
-        </TouchableOpacity>
-
-        {/* CURVA */}
-        <View style={styles.curve} />
+        <View style={styles.botaoContainer}>
+          <TouchableOpacity style={styles.botaoConfira} activeOpacity={0.8}>
+            <Image
+              source={require("../../assets/images/homeLight/confira.png")}
+              style={styles.imagemBotao}
+            />
+          </TouchableOpacity>
+        </View>
 
         {/* CARDS */}
         <View style={styles.cardsContainer}>
-          {/* JOGOS */}
           <TouchableOpacity
             style={styles.card}
             onPress={irParaJogos}
@@ -71,7 +61,6 @@ export default function HomeScreen() {
             />
           </TouchableOpacity>
 
-          {/* ATIVIDADES */}
           <TouchableOpacity
             style={styles.card}
             onPress={irParaAtividades}
@@ -89,16 +78,15 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
+  container: { flex: 1 },
 
   /* HEADER */
   header: {
-    paddingTop: 40,
+    paddingTop: 45,
     paddingBottom: 10,
     backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   logoContainer: {
@@ -107,19 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  logoMao: {
-    width: 60,
-    height: 60,
-    resizeMode: "contain",
-    marginRight: 10,
-  },
-
-  logoTexto: {
-    width: 180,
-    height: 60,
-    resizeMode: "contain",
-  },
-
+ 
   /* BANNER */
   banner: {
     marginHorizontal: 16,
@@ -129,7 +105,7 @@ const styles = StyleSheet.create({
 
   bannerContent: {
     width: "100%",
-    height: 400,
+    height: 300,
   },
 
   bannerImage: {
@@ -138,28 +114,36 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
 
-  /* CURVA */
-  curve: {
-    height: 130,
-    marginTop: -50,
+  /* BOTÃO CONFIRA */
+  botaoContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 20,
+  },
+
+  botaoConfira: { alignItems: "center" },
+
+  imagemBotao: {
+    width: 150,
+    height: 50,
+    resizeMode: "contain",
   },
 
   /* CARDS */
   cardsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: -5,
+    marginTop: 10,
     paddingHorizontal: 20,
   },
 
   card: {
-    width: 180,
-    height: 180,
+    width: 150,
+    height: 150,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
@@ -167,19 +151,8 @@ const styles = StyleSheet.create({
   },
 
   iconImage: {
-    width: 130,
-    height: 130,
-    resizeMode: "contain",
-  },
-
-  botaoConfira: {
-    alignItems: "center",
-    marginTop: 10,
-  },
-
-  imagemBotao: {
-    width: 180,
-    height: 60,
+    width: 110,
+    height: 110,
     resizeMode: "contain",
   },
 });

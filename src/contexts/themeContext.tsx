@@ -12,11 +12,15 @@ export type Theme = {
   icon: string;
   text: string;
   banner: string;
+  primary: string; 
+  button?: string;      
+  buttonText?: string;   
+
 };
 
 const lightTheme: Theme = {
-  background: "#D9D9D9",
-  header: "#EAEAEA",
+  background: "#FFFFFF",
+  header: "#3A8FB7",
   logo: "#3A8FB7",
   curve: "#5DADE2",
   card: "#FFFFFF",
@@ -25,19 +29,21 @@ const lightTheme: Theme = {
   icon: "#3A8FB7",
   text: "#000000",
   banner: "#E91E63",
+  primary: "#3A8FB7", // ✅ adiciona aqui
 };
 
 const darkTheme: Theme = {
-  background: "#2F2F2F",
+  background: "#2C2C2C",
   header: "#3F3F3F",
   logo: "#FFFFFF",
   curve: "#5DADE2",
-  card: "#EAEAEA",
+  card: "#444444",
   border: "transparent",
   footer: "#3F3F3F",
   icon: "#FFFFFF",
   text: "#FFFFFF",
   banner: "#880E4F",
+  primary: "#FFFFFF", // ✅ adiciona aqui
 };
 
 type ThemeContextType = {

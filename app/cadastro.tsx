@@ -1,16 +1,11 @@
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+// app/cadastro.tsx
+import React from 'react';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import {
-  Modal,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet
-} from 'react-native';
 
-import { useCadastro } from '../hooks/useCadastro';
 import { InputAnimado } from '../src/components/InputAnimado';
+import { useCadastro } from '../hooks/useCadastro';
 
 export default function CadastroScreen() {
   const router = useRouter();
@@ -35,18 +30,31 @@ export default function CadastroScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      
-      {/* 🔥 BOTÃO VOLTAR */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={26} color="#000" />
-      </TouchableOpacity>
+      {/* HEADER */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={26} color="#000" />
+        </TouchableOpacity>
+
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../assets/images/homeLight/mao.png')}
+            style={styles.logoMao}
+          />
+          <Image
+            source={require('../assets/images/homeLight/BrincaLibras.png')}
+            style={styles.logoTexto}
+          />
+        </View>
+
+        <View style={{ width: 26 }} />
+      </View>
 
       <Text style={styles.title}>Cadastro</Text>
 
-      {/* SOCIAL */}
+      {/* SOCIAL LOGIN */}
       <View style={styles.socialContainer}>
         <Text style={styles.socialText}>Utilize uma rede social...</Text>
-
         <View style={styles.iconRow}>
           <Ionicons name="logo-google" size={32} color="#4285F4" />
           <FontAwesome name="facebook-official" size={32} color="#3b5998" />
@@ -139,43 +147,25 @@ export default function CadastroScreen() {
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
-
-      {/* 🔥 MODAL */}
-      <Modal visible={sucesso} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          <View style={styles.successCard}>
-            <Ionicons name="checkmark-circle" size={60} color="#4CAF50" />
-
-            <Text style={styles.successTitle}>Sucesso!</Text>
-            <Text style={styles.successMessage}>Sua conta foi criada com sucesso!</Text>
-
-            <TouchableOpacity style={styles.successButton} onPress={fecharESair}>
-              <Text style={styles.successButtonText}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </ScrollView>
   );
 }
 
-// Mantendo seu estilo original, levemente ajustado para consistência visual
+/* STYLES */
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: '#fff',
-    padding: 30,
-    justifyContent: 'center'
+  container: { flexGrow: 1, backgroundColor: '#fff', padding: 20 },
+  header: {
+    paddingTop: 45,
+    paddingBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  backButton: { marginBottom: 10 },
-  title: { fontSize: 32, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
-  socialContainer: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 15,
-    padding: 20,
-    alignItems: 'center'
-  },
+  logoContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
+  logoMao: { width: 60, height: 60, resizeMode: 'contain', marginRight: 10 },
+  logoTexto: { width: 180, height: 60, resizeMode: 'contain' },
+  title: { fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
+  socialContainer: { borderWidth: 1, borderColor: '#ddd', borderRadius: 15, padding: 20, alignItems: 'center', marginBottom: 20 },
   socialText: { marginBottom: 15 },
   iconRow: { flexDirection: 'row', justifyContent: 'space-around', width: '100%' },
   dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 30 },
@@ -185,19 +175,6 @@ const styles = StyleSheet.create({
   label: { fontWeight: 'bold' },
   labelErro: { flexDirection: 'row', alignItems: 'center' },
   msgErro: { color: 'red', marginLeft: 10, fontSize: 12 },
-  button: {
-    backgroundColor: '#000',
-    borderRadius: 15,
-    height: 55,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10
-  },
+  button: { backgroundColor: '#000', borderRadius: 15, height: 55, justifyContent: 'center', alignItems: 'center', marginTop: 10 },
   buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
-  successCard: { width: '80%', backgroundColor: '#fff', borderRadius: 20, padding: 25, alignItems: 'center' },
-  successTitle: { fontSize: 22, fontWeight: 'bold', marginTop: 10 },
-  successMessage: { textAlign: 'center', marginVertical: 15 },
-  successButton: { backgroundColor: '#000', paddingVertical: 12, paddingHorizontal: 40, borderRadius: 10 },
-  successButtonText: { color: '#fff', fontWeight: 'bold' }
 });

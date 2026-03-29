@@ -1,4 +1,3 @@
-// hooks/usePerfil.ts
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -29,13 +28,15 @@ export function usePerfil() {
       const userStorage = await AsyncStorage.getItem('user');
       if (!userStorage) {
         setErro('Usuário não encontrado no dispositivo');
-        setLoading(false);
         return;
       }
 
       const user: Usuario = JSON.parse(userStorage);
 
-      const response = await fetch(`${API_URL}/${user.id}`);
+      const response = await fetch(`${API_URL}/${user.id}`, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+
       if (!response.ok) throw new Error('Erro ao buscar usuário');
 
       const data: Usuario = await response.json();
@@ -44,8 +45,8 @@ export function usePerfil() {
       setNome(data.nome ?? '');
       setEmail(data.email ?? '');
     } catch (e) {
-      setErro('Erro ao carregar perfil');
       console.error(e);
+      setErro('Erro ao carregar perfil');
     } finally {
       setLoading(false);
     }
@@ -63,7 +64,7 @@ export function usePerfil() {
 
       const body: any = { nome, email };
 
-      // envia senha somente se foi informada
+      // envia senha apenas se foi informada e válida
       if (novaSenha && novaSenha.length >= 6) {
         body.senha = novaSenha;
       }
@@ -74,14 +75,23 @@ export function usePerfil() {
         body: JSON.stringify(body),
       });
 
-      if (!response.ok) throw new Error('Erro ao atualizar perfil');
+      if (!response.ok) {
+        const msg = await response.text();
+        throw new Error(msg || 'Erro ao atualizar perfil');
+      }
 
-      // atualiza estado local
-      setUsuario({ ...usuario, nome, email });
+      const updatedUser: Usuario = await response.json();
+
+      // Atualiza estado local e AsyncStorage
+      setUsuario(updatedUser);
+      setNome(updatedUser.nome ?? '');
+      setEmail(updatedUser.email ?? '');
+      await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+
       alert('Perfil atualizado com sucesso!');
     } catch (e) {
-      setErro('Erro ao atualizar perfil');
       console.error(e);
+      setErro('Erro ao atualizar perfil');
     } finally {
       setLoading(false);
     }

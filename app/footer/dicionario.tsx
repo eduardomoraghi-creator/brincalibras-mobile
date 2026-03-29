@@ -1,8 +1,9 @@
 // app/footer/dicionario.tsx
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
-import { useTheme } from '../../src/contexts/themeContext'; // ✅ correto
-import { useHome } from '../../hooks/useHome'; // (mantido caso use navegação depois)
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { useTheme } from '../../src/contexts/themeContext'; 
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 // Exemplo simples de dicionário
 const dicionario = [
@@ -12,24 +13,32 @@ const dicionario = [
 ];
 
 export default function DicionarioScreen() {
-  const { theme } = useTheme(); // ✅ agora vem do contexto global
+  const { theme } = useTheme(); 
+  const router = useRouter();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.title, { color: theme.logo }]}>
-        Dicionário de Libras
-      </Text>
+      {/* HEADER topo igual Home + seta voltar */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        </TouchableOpacity>
 
+       
+        <View style={{ width: 28 }} /> {/* placeholder para equilibrar o header */}
+      </View>
+
+      {/* TITULO */}
+      <Text style={[styles.title, { color: theme.text }]}>Dicionário</Text>
+
+      {/* LISTA DE LETRAS */}
       <FlatList
         data={dicionario}
         keyExtractor={(item) => item.letra}
         numColumns={4}
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            <Text style={[styles.letra, { color: theme.text }]}>
-              {item.letra}
-            </Text>
+            <Text style={[styles.letra, { color: theme.text }]}>{item.letra}</Text>
             <Image source={item.imagem} style={styles.imagem} />
           </View>
         )}
@@ -40,12 +49,35 @@ export default function DicionarioScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 16
+
+  /* HEADER topo igual Home + seta voltar */
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 40,
+    paddingBottom: 10,
+    backgroundColor: '#FFFFFF', // fundo branco
+    paddingHorizontal: 15,
   },
+  backButton: {
+    width: 28,
+    alignItems: 'center',
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+
+  title: {
+    fontSize: 30,
+
+    textAlign: 'center',
+    marginVertical: 16,
+  },
+
   itemContainer: {
     flex: 1,
     margin: 8,
@@ -54,11 +86,12 @@ const styles = StyleSheet.create({
   letra: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 4
+    marginBottom: 4,
   },
+
   imagem: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain'
+    width: 80, 
+    height: 80, 
+    resizeMode: 'contain',
   },
 });
