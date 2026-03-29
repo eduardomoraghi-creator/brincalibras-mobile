@@ -16,19 +16,27 @@ export default function DicionarioScreen() {
   const { theme } = useTheme(); 
   const router = useRouter();
 
+  const handleVoltar = () => {
+    try {
+      router.back();
+    } catch {
+      router.push("/footer/home");
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* HEADER topo igual Home + seta voltar */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+      {/* HEADER */}
+      <View style={[styles.header, { backgroundColor: theme.background }]}>
+        <TouchableOpacity onPress={handleVoltar} style={styles.backButton}>
         </TouchableOpacity>
 
-       
-        <View style={{ width: 28 }} /> {/* placeholder para equilibrar o header */}
-      </View>
+        {/* TÍTULO CENTRAL */}
+        <Text style={[styles.headerTitle, { color: theme.text }]}>Dicionário</Text>
 
-      {/* TITULO */}
-      <Text style={[styles.title, { color: theme.text }]}>Dicionário</Text>
+        {/* Placeholder à direita para manter centralizado */}
+        <View style={{ width: 28 }} />
+      </View>
 
       {/* LISTA DE LETRAS */}
       <FlatList
@@ -50,34 +58,26 @@ export default function DicionarioScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
 
-  /* HEADER topo igual Home + seta voltar */
+  /* HEADER */
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingTop: 40,
     paddingBottom: 10,
-    backgroundColor: '#FFFFFF', // fundo branco
     paddingHorizontal: 15,
   },
   backButton: {
     width: 28,
     alignItems: 'center',
   },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-
-  title: {
-    fontSize: 30,
-
+  headerTitle: {
+    flex: 1,
     textAlign: 'center',
-    marginVertical: 16,
+    fontSize: 30,
   },
 
+  /* LISTA DE LETRAS */
   itemContainer: {
     flex: 1,
     margin: 8,
@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
   },
-
   imagem: {
     width: 80, 
     height: 80, 

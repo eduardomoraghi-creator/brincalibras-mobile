@@ -1,6 +1,6 @@
 // app/login.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, Linking } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
@@ -49,10 +49,21 @@ export default function LoginScreen() {
             Utilize uma rede social...
           </Text>
           <View style={styles.iconRow}>
-            <Ionicons name="logo-google" size={32} color="#4285F4" />
-            <FontAwesome name="facebook-official" size={32} color="#3b5998" />
-            <Ionicons name="logo-instagram" size={32} color="#C13584" />
-            <Ionicons name="logo-linkedin" size={32} color="#0077B5" />
+            <TouchableOpacity onPress={() => Linking.openURL('https://accounts.google.com')}>
+              <Ionicons name="logo-google" size={32} color="#4285F4" />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.facebook.com')}>
+              <FontAwesome name="facebook-official" size={32} color="#3b5998" />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com')}>
+              <Ionicons name="logo-instagram" size={32} color="#C13584" />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.linkedin.com')}>
+              <Ionicons name="logo-linkedin" size={32} color="#0077B5" />
+            </TouchableOpacity>
           </View>
         </View>
 

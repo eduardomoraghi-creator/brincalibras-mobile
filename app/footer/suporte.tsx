@@ -43,35 +43,35 @@ export default function SuporteScreen() {
   };
 
   // 🔹 mapa de palavras-chave → telas
-const palavrasPorRota = {
-  "/footer/jogos": ["game", "games", "jogos"],
-  "/footer/atividades": ["atividade", "atividades"],
-  "/footer/perfil": ["perfil"],
-  "/footer/suporte": ["suporte"],
-  "/footer/dicionario": ["dicionario", "letra", "palavra", "abecedario"],
-} as const;
+  const palavrasPorRota = {
+    "/footer/jogos": ["game", "games", "jogos"],
+    "/footer/atividades": ["atividade", "atividades"],
+    "/footer/perfil": ["perfil"],
+    "/footer/suporte": ["suporte"],
+    "/footer/dicionario": ["dicionario", "letra", "palavra", "abecedario"],
+  } as const;
 
-type RotaValida = keyof typeof palavrasPorRota; // tipos literais das rotas
+  type RotaValida = keyof typeof palavrasPorRota; // tipos literais das rotas
 
-// 🔹 construindo mapa de palavras → rota
-const rotas: Record<string, RotaValida> = {};
-Object.entries(palavrasPorRota).forEach(([rota, palavras]) => {
-  palavras.forEach((palavra) => {
-    rotas[palavra.toLowerCase()] = rota as RotaValida; // ✅ garante que é literal
+  // 🔹 construindo mapa de palavras → rota
+  const rotas: Record<string, RotaValida> = {};
+  Object.entries(palavrasPorRota).forEach(([rota, palavras]) => {
+    palavras.forEach((palavra) => {
+      rotas[palavra.toLowerCase()] = rota as RotaValida; // ✅ garante que é literal
+    });
   });
-});
 
-// 🔹 função de navegação
-const navegarPorBusca = () => {
-  if (!busca) return;
-  const termo = busca.toLowerCase();
-  const rotaEncontrada = rotas[termo];
-  if (rotaEncontrada) {
-    router.push(rotaEncontrada); // ✅ TypeScript agora aceita
-  } else {
-    alert("Nenhuma tela encontrada para esta busca.");
-  }
-};
+  // 🔹 função de navegação
+  const navegarPorBusca = () => {
+    if (!busca) return;
+    const termo = busca.toLowerCase();
+    const rotaEncontrada = rotas[termo];
+    if (rotaEncontrada) {
+      router.push(rotaEncontrada); // ✅ TypeScript agora aceita
+    } else {
+      alert("Nenhuma tela encontrada para esta busca.");
+    }
+  };
   return (
     <ScrollView
       contentContainerStyle={[
@@ -81,8 +81,10 @@ const navegarPorBusca = () => {
     >
       {/* HEADER */}
       <View style={[styles.header, { backgroundColor: theme.background }]}>
-        <TouchableOpacity onPress={handleVoltar}>
-        </TouchableOpacity>
+        <TouchableOpacity onPress={handleVoltar}></TouchableOpacity>
+
+        {/* TÍTULO */}
+        <Text style={styles.screenTitle}>Suporte</Text>
 
         <View style={{ width: 26 }} />
       </View>
@@ -204,6 +206,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+
+  screenTitle: {
+    fontSize: 30,
+    textAlign: "center",
+    marginVertical: 15,
+    color: "#000",
+  },
   logoContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -221,10 +230,26 @@ const styles = StyleSheet.create({
   },
   searchInput: { marginLeft: 10, flex: 1 },
   subTitle: { textAlign: "center", marginBottom: 15, fontWeight: "600" },
-  row: { flexDirection: "row", justifyContent: "center", gap: 10, marginBottom: 10 },
-  contatoBtn: { flexDirection: "row", alignItems: "center", padding: 10, borderRadius: 25, gap: 8 },
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    marginBottom: 10,
+  },
+  contatoBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    borderRadius: 25,
+    gap: 8,
+  },
   contatoText: { fontSize: 13 },
-  linkBtn: { backgroundColor: "#000", borderRadius: 50, paddingHorizontal: 15, paddingVertical: 8 },
+  linkBtn: {
+    backgroundColor: "#000",
+    borderRadius: 50,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+  },
   emailBtn: { alignSelf: "center", marginBottom: 20 },
   card: { borderRadius: 20, padding: 15, marginBottom: 15 },
   cardTitle: { textAlign: "center", marginBottom: 10, fontWeight: "bold" },

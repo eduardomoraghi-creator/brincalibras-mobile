@@ -1,7 +1,7 @@
 // app/cadastro.tsx
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { InputAnimado } from '../src/components/InputAnimado';
@@ -51,23 +51,6 @@ export default function CadastroScreen() {
       </View>
 
       <Text style={styles.title}>Cadastro</Text>
-
-      {/* SOCIAL LOGIN */}
-      <View style={styles.socialContainer}>
-        <Text style={styles.socialText}>Utilize uma rede social...</Text>
-        <View style={styles.iconRow}>
-          <Ionicons name="logo-google" size={32} color="#4285F4" />
-          <FontAwesome name="facebook-official" size={32} color="#3b5998" />
-          <Ionicons name="logo-instagram" size={32} color="#C13584" />
-          <Ionicons name="logo-linkedin" size={32} color="#0077B5" />
-        </View>
-      </View>
-
-      <View style={styles.dividerRow}>
-        <View style={styles.line} />
-        <Text style={styles.orText}>ou</Text>
-        <View style={styles.line} />
-      </View>
 
       {/* INPUTS */}
       <View style={styles.inputSection}>
@@ -165,12 +148,6 @@ const styles = StyleSheet.create({
   logoMao: { width: 60, height: 60, resizeMode: 'contain', marginRight: 10 },
   logoTexto: { width: 180, height: 60, resizeMode: 'contain' },
   title: { fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
-  socialContainer: { borderWidth: 1, borderColor: '#ddd', borderRadius: 15, padding: 20, alignItems: 'center', marginBottom: 20 },
-  socialText: { marginBottom: 15 },
-  iconRow: { flexDirection: 'row', justifyContent: 'space-around', width: '100%' },
-  dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 30 },
-  line: { flex: 1, height: 1, backgroundColor: '#ddd' },
-  orText: { marginHorizontal: 10 },
   inputSection: { width: '100%' },
   label: { fontWeight: 'bold' },
   labelErro: { flexDirection: 'row', alignItems: 'center' },
