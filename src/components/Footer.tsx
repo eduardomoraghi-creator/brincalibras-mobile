@@ -3,7 +3,7 @@ import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useTheme } from "../../src/contexts/themeContext";
+import { useTheme } from "../contexts/themeContext";
 
 export default function Footer() {
   const router = useRouter();
