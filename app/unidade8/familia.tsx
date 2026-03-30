@@ -7,9 +7,9 @@ export default function FamiliaScreen() {
   const router = useRouter();
 
   const cards = [
-    { id: 'intro', title: 'Introdução', progress: 100, link: '/introducao_unid8' },
-    { id: 'a1', title: 'Atividade 1', progress: 60, link: '/atividade1_unid8' },
-    { id: 'a2', title: 'Atividade 2', progress: 30, link: '/atividade2_unid8' },
+    { id: 'intro', title: 'Introdução', progress: 100, link: '/unidade8/introducao' },
+    { id: 'a1', title: 'Atividade 1', progress: 60, link: '/unidade8/atividade1' },
+    { id: 'a2', title: 'Atividade 2', progress: 30, link: '/unidade8/atividade2' },
   ];
 
   return (

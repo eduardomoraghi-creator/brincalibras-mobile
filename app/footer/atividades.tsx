@@ -17,7 +17,7 @@ export default function AtividadesScreen() {
 
   const atividades = [
     { id: 1, imagem: require('../../assets/images/atividades/clima.png'), path: '/clima' },
-    { id: 8, imagem: require('../../assets/images/atividades/familia.png'), path: '/familia' },
+    { id: 8, imagem: require('../../assets/images/atividades/familia.png'), path: '/unidade8/familia' },
     // outras atividades podem ser adicionadas aqui
   ];
 
