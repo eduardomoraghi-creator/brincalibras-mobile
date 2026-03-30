@@ -1,96 +1,155 @@
 // app/footer/dicionario.tsx
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { useTheme } from '../../src/contexts/themeContext'; 
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../src/contexts/themeContext";
 
-// Exemplo simples de dicionário
-const dicionario = [
-  { letra: 'A', imagem: require('../../assets/images/letras/A.png') },
-  { letra: 'I', imagem: require('../../assets/images/letras/I.png') },
-  { letra: 'O', imagem: require('../../assets/images/letras/O.png') },
+const DADOS = [
+  {
+    id: "1",
+    palavra: "Casa",
+    descricao: "Junte as pontas dos dedos formando um telhado.",
+    imagem: require("../../assets/images/dicionario/sinalCasa.png"),
+  },
+  {
+    id: "2",
+    palavra: "Amor",
+    descricao: "Cruze os braços sobre o peito.",
+    imagem: require("../../assets/images/dicionario/sinalAmor.png"),
+  },
+  
 ];
 
 export default function DicionarioScreen() {
-  const { theme } = useTheme(); 
-  const router = useRouter();
+  const { theme } = useTheme();
 
-  const handleVoltar = () => {
-    try {
-      router.back();
-    } catch {
-      router.push("/footer/home");
+  const [busca, setBusca] = useState("");
+  const [favoritos, setFavoritos] = useState<string[]>([]);
+
+  const dadosFiltrados = DADOS.filter((item) =>
+    item.palavra.toLowerCase().includes(busca.toLowerCase())
+  );
+
+  const toggleFavorito = (id: string) => {
+    if (favoritos.includes(id)) {
+      setFavoritos(favoritos.filter((f) => f !== id));
+    } else {
+      setFavoritos([...favoritos, id]);
     }
   };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* HEADER */}
-      <View style={[styles.header, { backgroundColor: theme.background }]}>
-        <TouchableOpacity onPress={handleVoltar} style={styles.backButton}>
-        </TouchableOpacity>
-
-        {/* TÍTULO CENTRAL */}
-        <Text style={[styles.headerTitle, { color: theme.text }]}>Dicionário</Text>
-
-        {/* Placeholder à direita para manter centralizado */}
-        <View style={{ width: 28 }} />
+      {/* 🔍 BUSCA */}
+      <View style={[styles.searchBox, { borderColor: theme.border }]}>
+        <Ionicons name="search" size={20} color={theme.icon} />
+        <TextInput
+          placeholder="Buscar palavra..."
+          placeholderTextColor="#999"
+          value={busca}
+          onChangeText={setBusca}
+          style={[styles.input, { color: theme.text }]}
+        />
       </View>
 
-      {/* LISTA DE LETRAS */}
+      {/* 📚 LISTA */}
       <FlatList
-        data={dicionario}
-        keyExtractor={(item) => item.letra}
-        numColumns={4}
-        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <Text style={[styles.letra, { color: theme.text }]}>{item.letra}</Text>
-            <Image source={item.imagem} style={styles.imagem} />
-          </View>
-        )}
+        data={dadosFiltrados}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => {
+          const isFavorito = favoritos.includes(item.id);
+
+          return (
+            <View
+              style={[
+                styles.card,
+                {
+                  backgroundColor: theme.card,
+                  borderColor: theme.border,
+                },
+              ]}
+            >
+              <Image source={item.imagem} style={styles.image} />
+
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.titulo, { color: theme.text }]}>
+                  {item.palavra}
+                </Text>
+
+                <Text style={[styles.descricao, { color: theme.text }]}>
+                  {item.descricao}
+                </Text>
+              </View>
+
+              {/* ⭐ FAVORITO */}
+              <TouchableOpacity onPress={() => toggleFavorito(item.id)}>
+                <Ionicons
+                  name={isFavorito ? "star" : "star-outline"}
+                  size={24}
+                  color={isFavorito ? "#FFD700" : theme.icon}
+                />
+              </TouchableOpacity>
+            </View>
+          );
+        }}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-
-  /* HEADER */
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 40,
-    paddingBottom: 10,
-    paddingHorizontal: 15,
-  },
-  backButton: {
-    width: 28,
-    alignItems: 'center',
-  },
-  headerTitle: {
+  container: {
     flex: 1,
-    textAlign: 'center',
-    fontSize: 30,
+    padding: 15,
   },
 
-  /* LISTA DE LETRAS */
-  itemContainer: {
+  searchBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+
+  input: {
     flex: 1,
-    margin: 8,
-    alignItems: 'center',
+    marginLeft: 8,
+    paddingVertical: 10,
   },
-  letra: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
+
+  card: {
+    flexDirection: "row",
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 12,
+    alignItems: "center",
   },
-  imagem: {
-    width: 80, 
-    height: 80, 
-    resizeMode: 'contain',
+
+  image: {
+    width: 150,
+    height: 150,
+    marginRight: 12,
+    resizeMode: "contain",
+  },
+
+  titulo: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  descricao: {
+    fontSize: 13,
+    marginTop: 4,
   },
 });

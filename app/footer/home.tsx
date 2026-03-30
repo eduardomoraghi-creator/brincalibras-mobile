@@ -32,7 +32,7 @@ export default function HomeScreen() {
         <View style={styles.banner}>
           <View style={styles.bannerContent}>
             <Image
-              source={require("../../assets/images/banner.png")}
+              source={require("../../assets/images/homeLight/banner.png")}
               style={styles.bannerImage}
             />
           </View>
@@ -56,7 +56,7 @@ export default function HomeScreen() {
             activeOpacity={0.8}
           >
             <Image
-              source={require("../../assets/images/homeLight/games.png")}
+              source={require("../../assets/images/jogos/games.png")}
               style={styles.iconImage}
             />
           </TouchableOpacity>

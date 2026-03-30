@@ -1,4 +1,3 @@
-// app/footer/suporte.tsx
 import React from "react";
 import {
   View,
@@ -7,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  Image,
 } from "react-native";
 import { Ionicons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -16,9 +14,9 @@ import { useSuporte } from "../../hooks/useSuporte";
 
 export default function SuporteScreen() {
   const router = useRouter();
+
   const {
     email,
-    darkMode,
     abrirWhatsApp,
     ligar,
     enviarEmail,
@@ -30,6 +28,9 @@ export default function SuporteScreen() {
     voltarFAQ,
     busca,
     setBusca,
+    sugestoes,
+    navegarPara,
+    navegarPorBusca,
   } = useSuporte();
 
   const { theme } = useTheme();
@@ -42,36 +43,6 @@ export default function SuporteScreen() {
     }
   };
 
-  // 🔹 mapa de palavras-chave → telas
-  const palavrasPorRota = {
-    "/footer/jogos": ["game", "games", "jogos"],
-    "/footer/atividades": ["atividade", "atividades"],
-    "/footer/perfil": ["perfil"],
-    "/footer/suporte": ["suporte"],
-    "/footer/dicionario": ["dicionario", "letra", "palavra", "abecedario"],
-  } as const;
-
-  type RotaValida = keyof typeof palavrasPorRota; // tipos literais das rotas
-
-  // 🔹 construindo mapa de palavras → rota
-  const rotas: Record<string, RotaValida> = {};
-  Object.entries(palavrasPorRota).forEach(([rota, palavras]) => {
-    palavras.forEach((palavra) => {
-      rotas[palavra.toLowerCase()] = rota as RotaValida; // ✅ garante que é literal
-    });
-  });
-
-  // 🔹 função de navegação
-  const navegarPorBusca = () => {
-    if (!busca) return;
-    const termo = busca.toLowerCase();
-    const rotaEncontrada = rotas[termo];
-    if (rotaEncontrada) {
-      router.push(rotaEncontrada); // ✅ TypeScript agora aceita
-    } else {
-      alert("Nenhuma tela encontrada para esta busca.");
-    }
-  };
   return (
     <ScrollView
       contentContainerStyle={[
@@ -79,24 +50,15 @@ export default function SuporteScreen() {
         { backgroundColor: theme.background },
       ]}
     >
-      {/* HEADER */}
-      <View style={[styles.header, { backgroundColor: theme.background }]}>
-        <TouchableOpacity onPress={handleVoltar}></TouchableOpacity>
 
-        {/* TÍTULO */}
-        <Text style={styles.screenTitle}>Suporte</Text>
 
-        <View style={{ width: 26 }} />
-      </View>
-
-      {/* BUSCA */}
+      {/* 🔍 BUSCA */}
       <View
         style={[
           styles.searchBox,
           {
             backgroundColor: theme.background,
             borderColor: theme.text,
-            borderWidth: 1,
           },
         ]}
       >
@@ -108,9 +70,30 @@ export default function SuporteScreen() {
           value={busca}
           onChangeText={setBusca}
           onSubmitEditing={navegarPorBusca}
-          returnKeyType="search"
         />
       </View>
+
+      {/* 🔥 SUGESTÕES DINÂMICAS */}
+      {busca.length > 0 && (
+        <View style={[styles.sugestoesBox, { backgroundColor: theme.card }]}>
+          {sugestoes.length > 0 ? (
+            sugestoes.slice(0, 5).map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => navegarPara(item.rota)}
+              >
+                <Text style={[styles.sugestaoItem, { color: theme.text }]}>
+                  {item.palavra}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={{ padding: 10, color: theme.text }}>
+              Nenhuma sugestão encontrada
+            </Text>
+          )}
+        </View>
+      )}
 
       {/* CONTEÚDO */}
       {perguntaSelecionada ? (
@@ -139,9 +122,7 @@ export default function SuporteScreen() {
               onPress={abrirWhatsApp}
             >
               <FontAwesome name="whatsapp" size={18} color="#FFF" />
-              <Text style={[styles.contatoText, { color: "#FFF" }]}>
-                (11) 11111-1111
-              </Text>
+              <Text style={styles.contatoText}>(11) 11111-1111</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -149,9 +130,7 @@ export default function SuporteScreen() {
               onPress={ligar}
             >
               <MaterialIcons name="phone" size={18} color="#FFF" />
-              <Text style={[styles.contatoText, { color: "#FFF" }]}>
-                (11) 11111-1111
-              </Text>
+              <Text style={styles.contatoText}>(11) 11111-1111</Text>
             </TouchableOpacity>
           </View>
 
@@ -160,7 +139,7 @@ export default function SuporteScreen() {
             onPress={enviarEmail}
           >
             <MaterialIcons name="email" size={18} color="#FFF" />
-            <Text style={[styles.contatoText, { color: "#FFF" }]}>{email}</Text>
+            <Text style={styles.contatoText}>{email}</Text>
           </TouchableOpacity>
 
           <View style={[styles.card, { backgroundColor: theme.card }]}>
@@ -175,9 +154,7 @@ export default function SuporteScreen() {
                     {item.pergunta}
                   </Text>
                 </TouchableOpacity>
-                <View
-                  style={[styles.divider, { backgroundColor: theme.primary }]}
-                />
+                <View style={styles.divider} />
               </View>
             ))}
 
@@ -195,28 +172,20 @@ export default function SuporteScreen() {
   );
 }
 
-/* ESTILOS */
 const styles = StyleSheet.create({
   container: { flexGrow: 1 },
+
   header: {
     paddingTop: 45,
     paddingBottom: 15,
     paddingHorizontal: 20,
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
   },
 
   screenTitle: {
     fontSize: 30,
     textAlign: "center",
-    marginVertical: 15,
-    color: "#000",
-  },
-  logoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
   },
 
   searchBox: {
@@ -228,33 +197,91 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
   },
-  searchInput: { marginLeft: 10, flex: 1 },
-  subTitle: { textAlign: "center", marginBottom: 15, fontWeight: "600" },
+
+  searchInput: {
+    marginLeft: 10,
+    flex: 1,
+  },
+
+  // 🔥 SUGESTÕES
+  sugestoesBox: {
+    marginHorizontal: 20,
+    borderRadius: 12,
+    marginTop: -10,
+    marginBottom: 10,
+  },
+
+  sugestaoItem: {
+    padding: 12,
+    borderBottomWidth: 0.5,
+    borderColor: "#ccc",
+  },
+
+  subTitle: {
+    textAlign: "center",
+    marginBottom: 15,
+  },
+
   row: {
     flexDirection: "row",
     justifyContent: "center",
     gap: 10,
-    marginBottom: 10,
   },
+
   contatoBtn: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
     borderRadius: 25,
     gap: 8,
+    marginHorizontal:25,
+    marginVertical: 10,
   },
-  contatoText: { fontSize: 13 },
+
+  contatoText: {
+    color: "#FFF",
+    fontSize: 13,
+  },
+
   linkBtn: {
     backgroundColor: "#000",
-    borderRadius: 50,
-    paddingHorizontal: 15,
-    paddingVertical: 8,
   },
-  emailBtn: { alignSelf: "center", marginBottom: 20 },
-  card: { borderRadius: 20, padding: 15, marginBottom: 15 },
-  cardTitle: { textAlign: "center", marginBottom: 10, fontWeight: "bold" },
-  item: { textAlign: "center", paddingVertical: 10 },
-  resposta: { textAlign: "center", marginVertical: 15 },
-  divider: { height: 1, marginHorizontal: 10 },
-  verMais: { textAlign: "center", marginTop: 10, fontWeight: "bold" },
+
+  emailBtn: {
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+
+  card: {
+    borderRadius: 20,
+    padding: 15,
+    marginBottom: 15,
+  },
+
+  cardTitle: {
+    textAlign: "center",
+    marginBottom: 10,
+    fontWeight: "bold",
+  },
+
+  item: {
+    textAlign: "center",
+    paddingVertical: 10,
+  },
+
+  resposta: {
+    textAlign: "center",
+    marginVertical: 15,
+  },
+
+  divider: {
+    height: 1,
+    backgroundColor: "#ccc",
+  },
+
+  verMais: {
+    textAlign: "center",
+    marginTop: 10,
+    fontWeight: "bold",
+  },
 });

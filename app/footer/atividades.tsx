@@ -26,20 +26,23 @@ export default function AtividadesScreen() {
         <TouchableOpacity onPress={() => router.back()}>
         </TouchableOpacity>
 
-       
         <View style={{ width: 26 }} /> {/* espaço para centralizar */}
       </View>
 
-      {/* TÍTULO */}
-      <Text style={styles.screenTitle}>Atividades</Text>
-
       {/* CONTEÚDO */}
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.cardsContainer}>
           {atividades.map((item) => (
             <TouchableOpacity key={item.id} style={styles.card} activeOpacity={0.8}>
               <View style={styles.iconWrapper}>
-                <Image source={item.imagem} style={styles.iconImage} resizeMode="contain" />
+                <Image
+                  source={item.imagem}
+                  style={styles.iconImage}
+                  resizeMode="contain"
+                />
               </View>
             </TouchableOpacity>
           ))}
@@ -56,19 +59,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
-    paddingTop: 40,
+    paddingTop: 20,
     paddingBottom: 10,
     justifyContent: 'space-between',
     backgroundColor: '#FFFFFF',
   },
-
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-
 
   screenTitle: {
     fontSize: 30,
@@ -103,7 +98,7 @@ const styles = StyleSheet.create({
   iconWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1, // força centralização vertical
+    flex: 1,
   },
 
   iconImage: {

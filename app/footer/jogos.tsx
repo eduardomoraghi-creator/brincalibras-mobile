@@ -1,8 +1,8 @@
+// src/app/footer/jogos.tsx
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Image } from 'react-native';
 
 import { useJogos } from '../../hooks/useJogos';
 
@@ -41,7 +41,6 @@ export default function JogosScreen() {
         <TouchableOpacity onPress={() => router.back()}>
         </TouchableOpacity>
 
-    
         <View style={{ width: 26 }} /> {/* espaço para centralizar */}
       </View>
 
@@ -81,17 +80,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-
   screenTitle: {
     fontSize: 30,
     textAlign: 'center',
-    marginVertical: 15,
     color: '#000',
   },
 
@@ -101,7 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     flexWrap: 'wrap',
-    marginTop: 10,
+    marginTop: 40,
   },
 
   card: {
@@ -121,7 +112,7 @@ const styles = StyleSheet.create({
   iconWrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1, // força centralização vertical
+    flex: 1,
   },
 
   cardTitulo: {

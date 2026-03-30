@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAdmin } from '../../hooks/useAdmin';
-import Footer from '../../src/components/Footer';
 
 export default function AdminScreen() {
   const { router, carregando, logout, adminName } = useAdmin();
@@ -24,7 +23,6 @@ export default function AdminScreen() {
         <Text style={styles.buttonText}>Sair</Text>
       </TouchableOpacity>
 
-      <Footer />
     </View>
   );
 }

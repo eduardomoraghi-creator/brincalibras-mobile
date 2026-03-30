@@ -64,7 +64,7 @@ function LayoutContent() {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push('/footer/dicionario')}>
-          <MaterialIcons name="sort-by-alpha" size={26} color={theme.icon} />
+          <MaterialIcons name="menu-book" size={26} color={theme.icon} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push('/footer/home')}>
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
 
   header: {
-    paddingTop: 45,
-    paddingBottom: 15,
+    paddingTop: 15,
+    paddingBottom: 30, 
     paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
