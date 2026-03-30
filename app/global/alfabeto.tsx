@@ -1,4 +1,4 @@
-// app/footer/alfabeto.tsx
+// app/global/alfabeto.tsx
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../src/contexts/themeContext'; 
@@ -20,7 +20,7 @@ export default function Alfabeto() {
     try {
       router.back();
     } catch {
-      router.push("/footer/home");
+      router.push("/global/home");
     }
   };
 

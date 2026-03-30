@@ -121,8 +121,8 @@ export const useLogin = () => {
       // ✅ REDIRECIONA PARA HOME OU ADMIN
       const destino =
         data.role === 'ADMIN'
-          ? '/footer/admin'
-          : '/footer/home';
+          ? '/global/admin'
+          : '/global/home';
       router.replace(destino);
 
     } catch (error) {

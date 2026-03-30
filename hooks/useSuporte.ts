@@ -24,35 +24,35 @@ export function useSuporte() {
 
   // 🔥 BASE DE BUSCA INTELIGENTE
   const baseBusca = [
-    { palavra: "home", rota: "/footer/home" },
-    { palavra: "inicio", rota: "/footer/home" },
+    { palavra: "home", rota: "/global/home" },
+    { palavra: "inicio", rota: "/global/home" },
 
-    { palavra: "perfil", rota: "/footer/perfil" },
-    { palavra: "usuario", rota: "/footer/perfil" },
+    { palavra: "perfil", rota: "/global/perfil" },
+    { palavra: "usuario", rota: "/global/perfil" },
 
-    { palavra: "atividades", rota: "/footer/atividades" },
-    { palavra: "exercicios", rota: "/footer/atividades" },
+    { palavra: "atividades", rota: "/global/atividades" },
+    { palavra: "exercicios", rota: "/global/atividades" },
 
-    { palavra: "jogos", rota: "/footer/jogos" },
-    { palavra: "game", rota: "/footer/jogos" },
+    { palavra: "jogos", rota: "/global/jogos" },
+    { palavra: "game", rota: "/global/jogos" },
 
-    { palavra: "dicionario", rota: "/footer/dicionario" },
-    { palavra: "palavras", rota: "/footer/dicionario" },
+    { palavra: "dicionario", rota: "/global/dicionario" },
+    { palavra: "palavras", rota: "/global/dicionario" },
 
-    { palavra: "alfabeto", rota: "/footer/alfabeto" },
-    { palavra: "letras", rota: "/footer/alfabeto" },
+    { palavra: "alfabeto", rota: "/global/alfabeto" },
+    { palavra: "letras", rota: "/global/alfabeto" },
 
-    { palavra: "suporte", rota: "/footer/suporte" },
-    { palavra: "ajuda", rota: "/footer/suporte" },
+    { palavra: "suporte", rota: "/global/suporte" },
+    { palavra: "ajuda", rota: "/global/suporte" },
 
-    { palavra: "suporte", rota: "/footer/suporte" },
-    { palavra: "ajuda", rota: "/footer/suporte" },
+    { palavra: "suporte", rota: "/global/suporte" },
+    { palavra: "ajuda", rota: "/global/suporte" },
 
-    { palavra: "suporte", rota: "/footer/suporte" },
-    { palavra: "ajuda", rota: "/footer/suporte" },
+    { palavra: "suporte", rota: "/global/suporte" },
+    { palavra: "ajuda", rota: "/global/suporte" },
 
-    { palavra: "suporte", rota: "/footer/suporte" },
-    { palavra: "ajuda", rota: "/footer/suporte" },
+    { palavra: "suporte", rota: "/global/suporte" },
+    { palavra: "ajuda", rota: "/global/suporte" },
   ];
 
   // 🔍 FILTRO DINÂMICO

@@ -12,6 +12,11 @@ export type Theme = {
   banner: string; // ✅ adicione esta linha
 };
 
+
+export const Fonts = {
+  regular: "System",
+  bold: "System",
+};
 // Tema claro
 export const lightTheme: Theme = {
   background: "#D9D9D9",

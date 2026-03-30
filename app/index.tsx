@@ -20,7 +20,7 @@ export default function Index() {
     // No web pode ser necessário aguardar um tick para garantir que o RootLayout existe
     const timeout = setTimeout(() => {
       if (usuarioLogado) {
-        router.replace('/footer/home');
+        router.replace('/global/home');
       } else {
         router.replace('/login');
       }

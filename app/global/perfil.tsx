@@ -1,4 +1,4 @@
-// app/footer/perfil.tsx
+// app/global/perfil.tsx
 import React, { useEffect, useState } from "react";
 import {
   View,

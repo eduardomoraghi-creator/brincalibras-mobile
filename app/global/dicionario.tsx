@@ -1,4 +1,4 @@
-// app/footer/dicionario.tsx
+// app/global/dicionario.tsx
 import React, { useState } from "react";
 import {
   View,

@@ -1,4 +1,4 @@
-// src/app/footer/home.tsx
+// src/app/global/home.tsx
 import React from "react";
 import {
   TouchableOpacity,

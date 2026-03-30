@@ -1,4 +1,4 @@
-// src/app/footer/atividades.tsx
+// src/app/global/atividades.tsx
 import React from 'react';
 import {
   View,
