@@ -26,7 +26,18 @@ export default function IntroducaoScreen() {
     { label: 'Mãe', videoId: 'IljftNTMgqU' }
   ];
 
-  const { item: slideAtual, next, prev, length } = useSlides(slides, { circular: true });
+  const { 
+    item: slideAtual, 
+    next, 
+    prev, 
+    length, 
+    maxVisited, 
+    isFinished,
+    isFirst, 
+    isLast   
+  } = useSlides(slides, { circular: false }); //desativado para o usuário não fazer o caminho inverso
+
+  const progressPercent = ((maxVisited + 1) / length) * 100;
 
   return (
     <SafeAreaProvider style={styles.screen}>
@@ -82,38 +93,60 @@ export default function IntroducaoScreen() {
           </View>
 
           <View style={styles.mediaControls}>
+            {/* Botão Voltar */}
             <TouchableOpacity
-              style={styles.iconBtn}
+              style={[styles.iconBtn, isFirst && { opacity: 0.3 }]}
               onPress={prev}
-              accessibilityLabel="Anterior"
+              disabled={isFirst}
             >
-              <Ionicons name="chevron-back-circle" size={44} color={PURPLE
-              
-              } />
+              <Ionicons name="chevron-back-circle" size={48} color={PURPLE} />
             </TouchableOpacity>
 
             <View style={styles.wordBox}>
               <Text style={styles.wordText}>{slideAtual?.label}</Text>
             </View>
 
+            {/* Botão Próximo */}
             <TouchableOpacity
-              style={styles.iconBtn}
+              style={[styles.iconBtn, isLast && { opacity: 0.3 }]}
               onPress={next}
-              accessibilityLabel="Próximo"
+              disabled={isLast}
             >
-              <Ionicons name="chevron-forward-circle" size={44} color={PURPLE
-              
-              } />
+              <Ionicons name="chevron-forward-circle" size={48} color={PURPLE} />
             </TouchableOpacity>
           </View>
         </View>
 
+        {/* Mensagem de Conclusão Dinâmica */}
+        {isFinished ? (
+            <Text style={styles.completedMessage}>
+              ✨ Concluído! Você pode progredir para a próxima lição.
+            </Text>
+          ) : (
+            <Text style={[styles.introText, { marginTop: 20, marginBottom: 0 }]}>
+              Assista a todos os sinais para liberar a próxima lição.
+            </Text>
+        )}
+
+        <View style={styles.progressContainer}>
+          <View style={styles.progressInfo}>
+            <Text style={styles.progressText}>Progresso da lição</Text>
+            <Text style={styles.progressCount}>{`${maxVisited + 1} / ${length}`}</Text>
+          </View>
+          
+          <View style={styles.progressTrack}>
+            <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
+          </View>
+        </View>
+
         <TouchableOpacity
-          style={styles.actionBtn}
-          onPress={() => alert('Próxima fase')}
-          accessibilityRole="button"
+          style={[styles.actionBtn, !isFinished && styles.disabledBtn]}
+          onPress={() => isFinished ? alert('Indo para próxima fase!') : null}
+          disabled={!isFinished} // Bloqueia o clique se não terminou
         >
-          <Text style={styles.actionText}>Continuar</Text>
+          <Text style={styles.actionText}>
+            {isFinished ? "Continuar" : "Assista tudo para liberar"}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaProvider>
@@ -239,4 +272,51 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  progressContainer: {
+    marginTop: 25,
+    paddingHorizontal: 10,
+  },
+  progressInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  progressText: {
+    color: '#666',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  progressCount: {
+    color: PURPLE,
+    fontWeight: '700',
+  },
+  progressTrack: {
+    width: '100%',
+    height: 10,
+    borderRadius: 10,
+    backgroundColor: '#E0E0E0',
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: PURPLE,
+    borderRadius: 10,
+  },
+  completedMessage: {
+    textAlign: 'center',
+    color: '#2E7D32', // Verde para sucesso
+    fontWeight: '700',
+    fontSize: 15,
+    marginTop: 15,
+    backgroundColor: '#E8F5E9',
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#C8E6C9',
+  },
+  disabledBtn: {
+    backgroundColor: '#BDBDBD', // Cinza para desabilitado
+    shadowOpacity: 0,
+    elevation: 0,
+  }
 });
