@@ -51,7 +51,7 @@ export default function IntroducaoScreen() {
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>Introdução - Sinais Básicos</Text>
+          <Text style={styles.headerTitle}>Introdução - Pais e Filhos</Text>
         </View>
       </View>
 
