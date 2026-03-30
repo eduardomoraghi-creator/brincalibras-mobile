@@ -204,8 +204,7 @@ const styles = StyleSheet.create({
     aspectRatio: 16 / 9,
     borderRadius: 15,
     borderWidth: 2,
-    borderColor: PURPLE
-  ,
+    borderColor: PURPLE,
     backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
