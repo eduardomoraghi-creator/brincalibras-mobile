@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'rea
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-import { InputAnimado } from '../src/components/InputAnimado';
+import { InputAnimado } from '../src/components/inputAnimado';
 import { useLogin } from '../hooks/useLogin';
 import LoginLayout from '../src/components/loginLayout';
 import { useTheme } from '../src/contexts/themeContext';

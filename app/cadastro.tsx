@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'rea
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-import { InputAnimado } from '../src/components/InputAnimado';
+import { InputAnimado } from '../src/components/inputAnimado';
 import { useCadastro } from '../hooks/useCadastro';
 
 export default function CadastroScreen() {
