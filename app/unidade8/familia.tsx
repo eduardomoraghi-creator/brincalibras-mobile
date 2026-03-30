@@ -7,9 +7,10 @@ export default function FamiliaScreen() {
   const router = useRouter();
 
   const cards = [
-    { id: 'intro', title: 'Introdução - Sinais Básicos', progress: 100, link: '/unidade8/introducao' },
+    { id: 'intro', title: 'Introdução - Pais e Filhos', progress: 100, link: '/unidade8/introducao' },
     { id: 'a1', title: 'Atividade 1 - Associar Sinais', progress: 60, link: '/unidade8/atividade1' },
-    { id: 'a2', title: 'Atividade 2 - Árvore Genealógica', progress: 30, link: '/unidade8/atividadeArvore' },
+    { id: 'aula2', title: 'Aula 2 - Avôs e irmãos', progress: 0, link: '/unidade8/aula2' },
+    { id: 'a2', title: 'Atividade 2 - Árvore Genealógica', progress: 30, link: '/unidade8/atividade2' },
   ];
 
   return (
@@ -34,22 +35,26 @@ export default function FamiliaScreen() {
             {cards.map(card => (
                 <View key={card.id} style={styles.card}>
                     <View style={styles.cardRow}>
-                    <MaterialIcons name="people" size={28} color="#6A04D1" />
-                    <Text style={styles.cardTitle}>{card.title}</Text>
+                        <MaterialIcons name="people" size={28} color="#6A04D1" />
+                        <Text style={styles.cardTitle}>{card.title}</Text>
                     </View>
 
-                    <View style={styles.progressWrap}>
-                    <View style={styles.progressTrack}>
-                        <View style={[styles.progressFill, { width: `${card.progress}%` }]} />
-                    </View>
-                    <Text style={styles.progressLabel}>{card.progress}%</Text>
+                    <View style={styles.progressContainer}>
+                        <View style={styles.progressInfo}>
+                            <Text style={styles.progressText}>Progresso</Text>
+                            <Text style={styles.progressCount}>{card.progress}%</Text>
+                        </View>
+
+                        <View style={styles.progressTrack}>
+                            <View style={[styles.progressFill, { width: `${card.progress}%` }]} />
+                        </View>
                     </View>
 
                     <TouchableOpacity
-                    style={styles.actionBtn}
-                    onPress={() => router.replace(card.link as any)}
-                    >
-                    <Text style={styles.actionText}>Continuar</Text>
+                        style={styles.actionBtn}
+                        onPress={() => router.replace(card.link as any)}
+                        >
+                        <Text style={styles.actionText}>Continuar</Text>
                     </TouchableOpacity>
                 </View>
             ))}
@@ -113,38 +118,40 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         marginLeft: 12,
     },
-
-    progressWrap: {
-    marginTop: 12,
+    progressContainer: {
+    marginTop: 25,
+    paddingHorizontal: 10,
+    },
+    progressInfo: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: 8,
+    },
+    progressText: {
+    color: '#666',
+    fontSize: 14,
+    fontWeight: '500',
+    },
+    progressCount: {
+    color: PURPLE,
+    fontWeight: '700',
     },
     progressTrack: {
-    flex: 1,
-    height: 12,
+    width: '100%',
+    height: 10,
     borderRadius: 10,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#eee',
+    backgroundColor: '#E0E0E0',
     overflow: 'hidden',
-    marginRight: 12,
     },
     progressFill: {
     height: '100%',
-    backgroundColor: PURPLE
-,
-    },
-    progressLabel: {
-    width: 40,
-    textAlign: 'right',
-    color: '#444',
-    fontWeight: '600',
+    backgroundColor: PURPLE,
+    borderRadius: 10,
     },
     actionBtn: {
     marginTop: 12,
     backgroundColor: PURPLE
-,
+    ,
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
