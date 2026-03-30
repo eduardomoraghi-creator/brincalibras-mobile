@@ -7,9 +7,9 @@ export default function FamiliaScreen() {
   const router = useRouter();
 
   const cards = [
-    { id: 'intro', title: 'Introdução', progress: 100 },
-    { id: 'a1', title: 'Atividade 1', progress: 60 },
-    { id: 'a2', title: 'Atividade 2', progress: 30 },
+    { id: 'intro', title: 'Introdução', progress: 100, link: '/introducao_unid8' },
+    { id: 'a1', title: 'Atividade 1', progress: 60, link: '/atividade1_unid8' },
+    { id: 'a2', title: 'Atividade 2', progress: 30, link: '/atividade2_unid8' },
   ];
 
   return (
@@ -47,7 +47,7 @@ export default function FamiliaScreen() {
 
                     <TouchableOpacity
                     style={styles.actionBtn}
-                    onPress={() => alert(`${card.title} — iniciar`)}
+                    onPress={() => router.replace(card.link as any)}
                     >
                     <Text style={styles.actionText}>Continuar</Text>
                     </TouchableOpacity>
@@ -59,7 +59,6 @@ export default function FamiliaScreen() {
 }
 
 const ORANGE = '#F57C00';
-const RED = '#D32F2F';
 
 const styles = StyleSheet.create({
     screen: {
@@ -75,13 +74,8 @@ const styles = StyleSheet.create({
     back: {
         position: 'absolute',
         left: 12,
-        top: 20,
-        borderRadius: 22,
-        padding: 6,
-        alignItems: 'center',
-        justifyContent: 'center',
         zIndex: 10,
-        elevation: 6,
+        padding: 8,
     },
     headerCenter: {
         flexDirection: 'row',
@@ -102,7 +96,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 12,
         borderWidth: 2,
-        borderColor: RED,
+        borderColor: ORANGE,
         paddingVertical: 14,
         paddingHorizontal: 14,
         marginBottom: 14,
