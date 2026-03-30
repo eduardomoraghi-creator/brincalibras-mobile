@@ -44,7 +44,7 @@ export default function IntroducaoScreen() {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.back}
-          onPress={() => router.replace('/footer/atividades')}
+          onPress={() => router.replace('/unidade8/familia')}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
           <Ionicons name="arrow-back" size={22} color="#fff" />
