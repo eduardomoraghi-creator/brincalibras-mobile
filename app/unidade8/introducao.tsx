@@ -51,8 +51,7 @@ export default function IntroducaoScreen() {
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>
-          <MaterialIcons name="people" size={28} color="#fff" />
-          <Text style={styles.headerTitle}>Família</Text>
+          <Text style={styles.headerTitle}>Introdução - Sinais Básicos</Text>
         </View>
       </View>
 
@@ -141,7 +140,7 @@ export default function IntroducaoScreen() {
 
         <TouchableOpacity
           style={[styles.actionBtn, !isFinished && styles.disabledBtn]}
-          onPress={() => isFinished ? alert('Indo para próxima fase!') : null}
+          onPress={() => router.replace('/unidade8/atividade1')}
           disabled={!isFinished} // Bloqueia o clique se não terminou
         >
           <Text style={styles.actionText}>

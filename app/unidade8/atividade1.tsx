@@ -74,7 +74,7 @@ export default function Atividade1Screen() {
             <TouchableOpacity onPress={() => router.push('/unidade8/familia')}>
             <Ionicons name="close" size={28} color="#fff" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Atividade 1</Text>
+            <Text style={styles.headerTitle}>Atividade 1 - Associar Sinais</Text>
             <Text style={styles.stepText}>{currentStep + 1} / {SINAIS_BASE.length}</Text>
         </View>
 
@@ -138,7 +138,7 @@ const PURPLE = '#6A04D1';
 const styles = StyleSheet.create({
     screen: { flex: 1, backgroundColor: '#F8F9FA' },
     header: {
-        height: 60,
+        height: 70,
         backgroundColor: PURPLE,
         flexDirection: 'row',
         alignItems: 'center',
