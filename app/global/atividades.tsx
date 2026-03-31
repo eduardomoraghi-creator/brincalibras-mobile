@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   Image,
+  Pressable,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -15,7 +16,8 @@ export default function AtividadesScreen() {
   const router = useRouter();
 
   const atividades = [
-    { id: 1, imagem: require('../../assets/images/atividades/clima.png') },
+    { id: 1, imagem: require('../../assets/images/atividades/clima.png'), path: '/clima' },
+    { id: 8, imagem: require('../../assets/images/atividades/familia.png'), path: '/unidade8/familia' },
     // outras atividades podem ser adicionadas aqui
   ];
 
@@ -37,6 +39,7 @@ export default function AtividadesScreen() {
         <View style={styles.cardsContainer}>
           {atividades.map((item) => (
             <TouchableOpacity key={item.id} style={styles.card} activeOpacity={0.8}>
+<<<<<<< HEAD:app/global/atividades.tsx
               <View style={styles.iconWrapper}>
                 <Image
                   source={item.imagem}
@@ -44,6 +47,11 @@ export default function AtividadesScreen() {
                   resizeMode="contain"
                 />
               </View>
+=======
+              <Pressable onPress={() => router.push(item.path as any)} style={styles.iconWrapper}>
+                <Image source={item.imagem} style={styles.iconImage} resizeMode="contain" />
+              </Pressable>
+>>>>>>> origin/unidade_8:app/footer/atividades.tsx
             </TouchableOpacity>
           ))}
         </View>
