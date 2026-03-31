@@ -1,5 +1,4 @@
-// app/global/dicionario.tsx
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -8,123 +7,186 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useTheme } from "../../src/contexts/themeContext";
 
-const DADOS = [
-  {
-    id: "1",
-    palavra: "Casa",
-    descricao: "Junte as pontas dos dedos formando um telhado.",
-    imagem: require("../../assets/images/dicionario/sinalCasa.png"),
-  },
-  {
-    id: "2",
-    palavra: "Amor",
-    descricao: "Cruze os braços sobre o peito.",
-    imagem: require("../../assets/images/dicionario/sinalAmor.png"),
-  },
-  
-];
+import { Ionicons } from "@expo/vector-icons";
+
+import { useTheme } from "../../src/contexts/themeContext";
+import { useDicionario } from "../../hooks/useDicionario";
 
 export default function DicionarioScreen() {
   const { theme } = useTheme();
 
-  const [busca, setBusca] = useState("");
-  const [favoritos, setFavoritos] = useState<string[]>([]);
-
-  const dadosFiltrados = DADOS.filter((item) =>
-    item.palavra.toLowerCase().includes(busca.toLowerCase())
-  );
-
-  const toggleFavorito = (id: string) => {
-    if (favoritos.includes(id)) {
-      setFavoritos(favoritos.filter((f) => f !== id));
-    } else {
-      setFavoritos([...favoritos, id]);
-    }
-  };
+  const {
+    busca,
+    setBusca,
+    favoritos,
+    toggleFavorito,
+    dadosFiltrados,
+    sugestoes,
+    navegarPara,
+    navegarPorBusca,
+  } = useDicionario();
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* 🔍 BUSCA */}
-      <View style={[styles.searchBox, { borderColor: theme.border }]}>
-        <Ionicons name="search" size={20} color={theme.icon} />
-        <TextInput
-          placeholder="Buscar palavra..."
-          placeholderTextColor="#999"
-          value={busca}
-          onChangeText={setBusca}
-          style={[styles.input, { color: theme.text }]}
-        />
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      {/* HEADER COMPLEMENTO */}
+      <View style={styles.headerComplemento}>
+        <View style={styles.searchWrapper}>
+          <View style={styles.searchBox}>
+            <Ionicons name="search" size={20} color="#8E8E8E" />
+
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Ex: casa, amor, escola..."
+              placeholderTextColor="#8E8E8E"
+              value={busca}
+              onChangeText={setBusca}
+              onSubmitEditing={navegarPorBusca}
+            />
+          </View>
+        </View>
       </View>
 
-      {/* 📚 LISTA */}
-      <FlatList
-        data={dadosFiltrados}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => {
-          const isFavorito = favoritos.includes(item.id);
+      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+        {/* SUGESTÕES */}
+        {busca.length > 0 && (
+          <View style={[styles.sugestoesBox, { backgroundColor: theme.card }]}>
+            {sugestoes.length > 0 ? (
+              sugestoes.slice(0, 5).map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.sugestaoCard}
+                  activeOpacity={0.7}
+                  onPress={navegarPara}
+                >
+                  <Ionicons
+                    name="search-outline"
+                    size={18}
+                    color={theme.primary}
+                    style={styles.sugestaoIcon}
+                  />
 
-          return (
-            <View
-              style={[
-                styles.card,
-                {
-                  backgroundColor: theme.card,
-                  borderColor: theme.border,
-                },
-              ]}
-            >
-              <Image source={item.imagem} style={styles.image} />
+                  <Text style={[styles.sugestaoTexto, { color: theme.text }]}>
+                    {item.palavra}
+                  </Text>
 
-              <View style={{ flex: 1 }}>
-                <Text style={[styles.titulo, { color: theme.text }]}>
-                  {item.palavra}
-                </Text>
+                  <Ionicons name="chevron-forward" size={18} color="#999" />
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text
+                style={{
+                  padding: 12,
+                  color: theme.text,
+                }}
+              >
+                Nenhuma sugestão encontrada
+              </Text>
+            )}
+          </View>
+        )}
 
-                <Text style={[styles.descricao, { color: theme.text }]}>
-                  {item.descricao}
-                </Text>
+        {/* LISTA */}
+        <FlatList
+          data={dadosFiltrados}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 22 }}
+          renderItem={({ item }) => {
+            const isFavorito = favoritos.includes(item.id);
+
+            return (
+              <View
+                style={[
+                  styles.card,
+                  {
+                    backgroundColor: theme.card,
+                    borderColor: theme.border,
+                  },
+                ]}
+              >
+                <Image source={item.imagem} style={styles.image} />
+
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.titulo, { color: theme.text }]}>
+                    {item.palavra}
+                  </Text>
+
+                  <Text style={[styles.descricao, { color: theme.text }]}>
+                    {item.descricao}
+                  </Text>
+                </View>
+
+                <TouchableOpacity onPress={() => toggleFavorito(item.id)}>
+                  <Ionicons
+                    name={isFavorito ? "star" : "star-outline"}
+                    size={24}
+                    color={isFavorito ? "#FFD700" : theme.icon}
+                  />
+                </TouchableOpacity>
               </View>
-
-              {/* ⭐ FAVORITO */}
-              <TouchableOpacity onPress={() => toggleFavorito(item.id)}>
-                <Ionicons
-                  name={isFavorito ? "star" : "star-outline"}
-                  size={24}
-                  color={isFavorito ? "#FFD700" : theme.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
+  headerComplemento: {
+    backgroundColor: "#2D9CDB",
+    paddingTop: 10,
+    paddingBottom: 20,
+  },
+
+  searchWrapper: {
+    paddingHorizontal: 20,
   },
 
   searchBox: {
+    backgroundColor: "#FFF",
+    borderRadius: 30,
+    paddingHorizontal: 15,
+    height: 45,
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    marginBottom: 15,
   },
 
-  input: {
+  searchInput: {
+    marginLeft: 10,
     flex: 1,
-    marginLeft: 8,
-    paddingVertical: 10,
+  },
+
+  sugestoesBox: {
+    marginHorizontal: 20,
+    borderRadius: 16,
+    marginTop: 12,
+    marginBottom: 12,
+    paddingVertical: 4,
+    elevation: 3,
+  },
+
+  sugestaoCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    borderBottomWidth: 0.5,
+    borderColor: "#E0E0E0",
+  },
+
+  sugestaoIcon: {
+    marginRight: 10,
+  },
+
+  sugestaoTexto: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: "500",
   },
 
   card: {
@@ -132,7 +194,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 12,
     borderWidth: 1,
-    marginBottom: 12,
+    marginBottom: 20,
+    marginHorizontal: 20,
     alignItems: "center",
   },
 

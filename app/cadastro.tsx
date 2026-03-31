@@ -1,15 +1,27 @@
-// app/cadastro.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-
-import { InputAnimado } from '../src/components/InputAnimado';
 import { useCadastro } from '../hooks/useCadastro';
+import { InputAnimado } from '../src/components/InputAnimado';
+import { ThemeProvider, useTheme } from '../src/contexts/themeContext';
+import CadastroLayout from '../src/components/cadastroLayout';
 
 export default function CadastroScreen() {
   const router = useRouter();
 
+  return (
+    <ThemeProvider>
+      <CadastroLayout>
+        <CadastroContent router={router} />
+      </CadastroLayout>
+    </ThemeProvider>
+  );
+}
+
+// Componente separado para usar useTheme
+function CadastroContent({ router }: { router: ReturnType<typeof useRouter> }) {
+  const { theme } = useTheme();
   const {
     nome, setNome,
     email, setEmail,
@@ -29,11 +41,11 @@ export default function CadastroScreen() {
   } = useCadastro();
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <>
       {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={26} color="#000" />
+          <Ionicons name="arrow-back" size={26} color={theme.text} />
         </TouchableOpacity>
 
         <View style={styles.logoContainer}>
@@ -50,31 +62,12 @@ export default function CadastroScreen() {
         <View style={{ width: 26 }} />
       </View>
 
-      <Text style={styles.title}>Cadastro</Text>
-
-      {/* SOCIAL LOGIN */}
-      <View style={styles.socialContainer}>
-        <Text style={styles.socialText}>Utilize uma rede social...</Text>
-        <View style={styles.iconRow}>
-          <Ionicons name="logo-google" size={32} color="#4285F4" />
-          <FontAwesome name="facebook-official" size={32} color="#3b5998" />
-          <Ionicons name="logo-instagram" size={32} color="#C13584" />
-          <Ionicons name="logo-linkedin" size={32} color="#0077B5" />
-        </View>
-      </View>
-
-      <View style={styles.dividerRow}>
-        <View style={styles.line} />
-        <Text style={styles.orText}>ou</Text>
-        <View style={styles.line} />
-      </View>
-
       {/* INPUTS */}
       <View style={styles.inputSection}>
         <InputAnimado
           label={
             <View style={styles.labelErro}>
-              <Text style={styles.label}>Nome</Text>
+              <Text style={[styles.label, { color: theme.text }]}>Nome</Text>
               {erro.nome && <Text style={styles.msgErro}>{mensagens.nome}</Text>}
             </View>
           }
@@ -91,7 +84,7 @@ export default function CadastroScreen() {
         <InputAnimado
           label={
             <View style={styles.labelErro}>
-              <Text style={styles.label}>E-mail</Text>
+              <Text style={[styles.label, { color: theme.text }]}>E-mail</Text>
               {erro.email && <Text style={styles.msgErro}>{mensagens.email}</Text>}
             </View>
           }
@@ -108,7 +101,7 @@ export default function CadastroScreen() {
         <InputAnimado
           label={
             <View style={styles.labelErro}>
-              <Text style={styles.label}>Senha</Text>
+              <Text style={[styles.label, { color: theme.text }]}>Senha</Text>
               {erro.senha && <Text style={styles.msgErro}>{mensagens.senha}</Text>}
             </View>
           }
@@ -126,7 +119,7 @@ export default function CadastroScreen() {
         <InputAnimado
           label={
             <View style={styles.labelErro}>
-              <Text style={styles.label}>Confirmar senha</Text>
+              <Text style={[styles.label, { color: theme.text }]}>Confirmar senha</Text>
               {erro.confirmaSenha && <Text style={styles.msgErro}>{mensagens.confirmaSenha}</Text>}
             </View>
           }
@@ -143,17 +136,16 @@ export default function CadastroScreen() {
 
         {erroGeral && <Text style={styles.msgErro}>{erroGeral}</Text>}
 
-        <TouchableOpacity style={styles.button} onPress={validarECadastrar}>
-          <Text style={styles.buttonText}>Cadastrar</Text>
+        <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={validarECadastrar}>
+          <Text style={[styles.buttonText, { color: theme.text }]}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </>
   );
 }
 
 /* STYLES */
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, backgroundColor: '#fff', padding: 20 },
   header: {
     paddingTop: 45,
     paddingBottom: 15,
@@ -164,17 +156,10 @@ const styles = StyleSheet.create({
   logoContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
   logoMao: { width: 60, height: 60, resizeMode: 'contain', marginRight: 10 },
   logoTexto: { width: 180, height: 60, resizeMode: 'contain' },
-  title: { fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
-  socialContainer: { borderWidth: 1, borderColor: '#ddd', borderRadius: 15, padding: 20, alignItems: 'center', marginBottom: 20 },
-  socialText: { marginBottom: 15 },
-  iconRow: { flexDirection: 'row', justifyContent: 'space-around', width: '100%' },
-  dividerRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 30 },
-  line: { flex: 1, height: 1, backgroundColor: '#ddd' },
-  orText: { marginHorizontal: 10 },
   inputSection: { width: '100%' },
   label: { fontWeight: 'bold' },
   labelErro: { flexDirection: 'row', alignItems: 'center' },
   msgErro: { color: 'red', marginLeft: 10, fontSize: 12 },
-  button: { backgroundColor: '#000', borderRadius: 15, height: 55, justifyContent: 'center', alignItems: 'center', marginTop: 10 },
-  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
+  button: { borderRadius: 15, height: 55, justifyContent: 'center', alignItems: 'center', marginTop: 10 },
+  buttonText: { fontSize: 18, fontWeight: 'bold' },
 });

@@ -4,14 +4,26 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, Linking } 
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-import { InputAnimado } from '../src/components/InputAnimado';
-import { useLogin } from '../hooks/useLogin';
+import { InputAnimado } from '../src/components/InputAnimado'; // ✅ named import
 import LoginLayout from '../src/components/loginLayout';
-import { useTheme } from '../src/contexts/themeContext';
+import { useLogin } from '../hooks/useLogin';
+import { ThemeProvider, useTheme } from '../src/contexts/themeContext'; // ✅ named imports
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { theme } = useTheme(); // cores dinâmicas
+
+  return (
+    <ThemeProvider>
+      <LoginLayout>
+        <LoginContent router={router} />
+      </LoginLayout>
+    </ThemeProvider>
+  );
+}
+
+// Componente separado para usar o hook useTheme e useLogin
+function LoginContent({ router }: { router: ReturnType<typeof useRouter> }) {
+  const { theme } = useTheme();
 
   const {
     email, setEmail,
@@ -23,11 +35,11 @@ export default function LoginScreen() {
     focusAnimSenha,
     errorAnim,
     animateFocus
-  } = useLogin(); 
+  } = useLogin();
 
   return (
-    <LoginLayout>
-      {/* HEADER baseado no Home, sem seta de voltar */}
+    <>
+      {/* HEADER */}
       <View style={[styles.header, { backgroundColor: theme.background }]}>
         <View style={styles.logoContainer}>
           <Image
@@ -39,7 +51,6 @@ export default function LoginScreen() {
             style={styles.logoTexto}
           />
         </View>
-        <Text style={[styles.title, { color: theme.text }]}>Login</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
@@ -52,15 +63,12 @@ export default function LoginScreen() {
             <TouchableOpacity onPress={() => Linking.openURL('https://accounts.google.com')}>
               <Ionicons name="logo-google" size={32} color="#4285F4" />
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => Linking.openURL('https://www.facebook.com')}>
               <FontAwesome name="facebook-official" size={32} color="#3b5998" />
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com')}>
               <Ionicons name="logo-instagram" size={32} color="#C13584" />
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => Linking.openURL('https://www.linkedin.com')}>
               <Ionicons name="logo-linkedin" size={32} color="#0077B5" />
             </TouchableOpacity>
@@ -133,7 +141,7 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </LoginLayout>
+    </>
   );
 }
 

@@ -1,4 +1,5 @@
 // app/global/suporte.tsx
+
 import React from "react";
 import {
   View,
@@ -8,8 +9,11 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
+
 import { Ionicons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
+
 import { useRouter } from "expo-router";
+
 import { useTheme } from "../../src/contexts/themeContext";
 import { useSuporte } from "../../hooks/useSuporte";
 
@@ -38,16 +42,15 @@ export default function SuporteScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
-      
-      {/* 🔵 FUNDO AZUL CONTÍNUO DO HEADER */}
+      {/* HEADER COMPLEMENTO */}
       <View style={styles.headerComplemento}>
         <View style={styles.searchWrapper}>
-          <View style={styles.searchBox}>
+          <View style={[styles.searchBox, { backgroundColor: theme.card }]}>
             <Ionicons name="search" size={20} color="#8E8E8E" />
             <TextInput
-              style={styles.searchInput}
+              style={[styles.searchInput, { color: theme.text }]}
               placeholder="Ex: perfil, jogos, atividades, dicionário..."
-              placeholderTextColor="#8E8E8E"
+              placeholderTextColor={theme.text}
               value={busca}
               onChangeText={setBusca}
               onSubmitEditing={navegarPorBusca}
@@ -56,40 +59,56 @@ export default function SuporteScreen() {
         </View>
       </View>
 
-      {/* 🔽 CONTEÚDO */}
       <ScrollView contentContainerStyle={styles.container}>
-        
-        {/* 🔥 SUGESTÕES */}
+        {/* SUGESTÕES MELHORADAS */}
         {busca.length > 0 && (
           <View style={[styles.sugestoesBox, { backgroundColor: theme.card }]}>
             {sugestoes.length > 0 ? (
               sugestoes.slice(0, 5).map((item, index) => (
                 <TouchableOpacity
                   key={index}
+                  style={styles.sugestaoCard}
+                  activeOpacity={0.7}
                   onPress={() => navegarPara(item.rota)}
                 >
-                  <Text style={[styles.sugestaoItem, { color: theme.text }]}>
+                  <Ionicons
+                    name="search-outline"
+                    size={18}
+                    color={theme.primary}
+                    style={styles.sugestaoIcon}
+                  />
+
+                  <Text style={[styles.sugestaoTexto, { color: theme.text }]}>
                     {item.palavra}
                   </Text>
+
+                  <Ionicons name="chevron-forward" size={18} color="#999" />
                 </TouchableOpacity>
               ))
             ) : (
-              <Text style={{ padding: 10, color: theme.text }}>
+              <Text
+                style={{
+                  padding: 12,
+                  color: theme.text,
+                }}
+              >
                 Nenhuma sugestão encontrada
               </Text>
             )}
           </View>
         )}
 
-        {/* CONTEÚDO */}
+        {/* RESTANTE DO CONTEÚDO */}
         {perguntaSelecionada ? (
           <View style={[styles.card, { backgroundColor: theme.card }]}>
             <Text style={[styles.cardTitle, { color: theme.primary }]}>
               {perguntaSelecionada.pergunta}
             </Text>
+
             <Text style={[styles.resposta, { color: theme.primary }]}>
               {perguntaSelecionada.resposta}
             </Text>
+
             <TouchableOpacity onPress={voltarFAQ}>
               <Text style={[styles.verMais, { color: theme.primary }]}>
                 Voltar
@@ -128,25 +147,24 @@ export default function SuporteScreen() {
               <Text style={styles.contatoText}>{email}</Text>
             </TouchableOpacity>
 
-<View style={[styles.card, styles.cardFAQ]}>
-                <Text style={[styles.cardTitle, { color: theme.primary }]}>
+            <View style={[styles.card, styles.cardFAQ]}>
+              <Text style={[styles.cardTitle, { color: "#FFFFFF" }]}>
                 Perguntas frequentes
               </Text>
 
               {perguntasVisiveis.map((item, index) => (
                 <View key={index}>
                   <TouchableOpacity onPress={() => abrirPergunta(item)}>
-                    <Text style={[styles.item, { color: "#FFFFFF" }]}>
-                      {item.pergunta}
-                    </Text>
+                    <Text style={styles.item}>{item.pergunta}</Text>
                   </TouchableOpacity>
+
                   <View style={styles.divider} />
                 </View>
               ))}
 
               {!mostrarMais && (
                 <TouchableOpacity onPress={() => setMostrarMais(true)}>
-                  <Text style={[styles.verMais, { color: theme.primary }]}>
+                  <Text style={[styles.verMais, { color: "#FFFFFF" }]}>
                     Ver mais...
                   </Text>
                 </TouchableOpacity>
@@ -164,29 +182,23 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 20,
   },
-  
-cardFAQ: {
-  backgroundColor: "#595959", 
-},
 
   headerComplemento: {
     backgroundColor: "#2D9CDB",
-    paddingBottom: 25,
+    paddingTop: 10,
+    paddingBottom: 20,
   },
 
   searchWrapper: {
     paddingHorizontal: 20,
-    marginTop: -15,
   },
 
   searchBox: {
-    backgroundColor: "#FFF",
     borderRadius: 30,
     paddingHorizontal: 15,
     height: 45,
     flexDirection: "row",
     alignItems: "center",
-    elevation: 4,
   },
 
   searchInput: {
@@ -196,15 +208,30 @@ cardFAQ: {
 
   sugestoesBox: {
     marginHorizontal: 20,
-    borderRadius: 12,
-    marginTop: 10,
-    marginBottom: 10,
+    borderRadius: 16,
+    marginTop: 12,
+    marginBottom: 12,
+    paddingVertical: 4,
+    elevation: 3,
   },
 
-  sugestaoItem: {
-    padding: 12,
+  sugestaoCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 14,
     borderBottomWidth: 0.5,
-    borderColor: "#ccc",
+    borderColor: "#E0E0E0",
+  },
+
+  sugestaoIcon: {
+    marginRight: 10,
+  },
+
+  sugestaoTexto: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: "500",
   },
 
   subTitle: {
@@ -249,6 +276,10 @@ cardFAQ: {
     marginHorizontal: 20,
   },
 
+  cardFAQ: {
+    backgroundColor: "#595959",
+  },
+
   cardTitle: {
     textAlign: "center",
     marginBottom: 10,
@@ -258,6 +289,7 @@ cardFAQ: {
   item: {
     textAlign: "center",
     paddingVertical: 10,
+    color: "#FFFFFF",
   },
 
   resposta: {

@@ -20,7 +20,7 @@ export default function Alfabeto() {
     try {
       router.back();
     } catch {
-      router.push("/global/home");
+      router.push("../global/home");
     }
   };
 

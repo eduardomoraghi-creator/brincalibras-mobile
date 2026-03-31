@@ -1,4 +1,3 @@
-// src/app/global/home.tsx
 import React from "react";
 import {
   TouchableOpacity,
@@ -13,17 +12,12 @@ import { useTheme } from "../../src/contexts/themeContext";
 
 export default function HomeScreen() {
   const { irParaJogos, irParaAtividades } = useHome();
-  const { theme } = useTheme(); // para cores dinâmicas caso queira no futuro
+
+  // Mantemos apenas o theme
+  const { theme } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* HEADER centralizado com MÃO e BRINCALIBRAS */}
-      <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          
-        </View>
-      </View>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
@@ -51,7 +45,7 @@ export default function HomeScreen() {
         {/* CARDS */}
         <View style={styles.cardsContainer}>
           <TouchableOpacity
-            style={styles.card}
+            style={[styles.card, { backgroundColor: theme.card }]}
             onPress={irParaJogos}
             activeOpacity={0.8}
           >
@@ -62,7 +56,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.card}
+            style={[styles.card, { backgroundColor: theme.card }]}
             onPress={irParaAtividades}
             activeOpacity={0.8}
           >
@@ -78,30 +72,17 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-
-  /* HEADER */
-  header: {
-    paddingTop: 45,
-    paddingBottom: 10,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center",
+  container: {
+    flex: 1,
   },
 
-  logoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
- 
   /* BANNER */
-  banner: {
-    marginHorizontal: 16,
-    marginTop: 5,
-    overflow: "hidden",
-  },
+ banner: {
+  marginHorizontal: 20,
+  marginTop: 1,
+  marginBottom: 1,
+  overflow: "hidden",
+},
 
   bannerContent: {
     width: "100%",
@@ -118,10 +99,13 @@ const styles = StyleSheet.create({
   botaoContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 20,
+    marginTop: 10,
+    marginBottom: 20,
   },
 
-  botaoConfira: { alignItems: "center" },
+  botaoConfira: {
+    alignItems: "center",
+  },
 
   imagemBotao: {
     width: 150,
@@ -143,7 +127,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,

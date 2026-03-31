@@ -1,4 +1,3 @@
-// app/global/_layout.tsx
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,6 +15,11 @@ function LayoutContent() {
   const rotaAtual = segments[segments.length - 1];
   const isHome = rotaAtual === "home";
   const isSuporte = rotaAtual === "suporte";
+
+  // 🔥 NOVO: mostrar botão também na Home
+  const mostrarDarkMode =
+    rotaAtual === "suporte" ||
+    rotaAtual === "home";
 
   const handleVoltar = () => {
     try {
@@ -52,27 +56,28 @@ function LayoutContent() {
       {/* 🔹 HEADER */}
       {isHome ? (
         <View style={[styles.header, { backgroundColor: theme.background }]}>
-          <View style={{ width: 26 }} />
+          <View style={{ width: 20 }} />
 
           <View style={styles.logoContainer}>
             <Image
               source={require("../../assets/images/homeLight/mao.png")}
               style={styles.logoMao}
             />
-            <Image
-              source={require("../../assets/images/homeLight/BrincaLibras.png")}
-              style={styles.logoTexto}
-            />
+
+            <View style={styles.logoTextoWrapper}>
+              <Image
+                source={require("../../assets/images/homeLight/BrincaLibras.png")}
+                style={styles.logoTexto}
+              />
+            </View>
           </View>
 
           <View style={{ width: 26 }} />
         </View>
       ) : (
         <View style={styles.headerInterno}>
-          {/* TEXTO ESQUERDA */}
           <Text style={styles.titulo}>{getTitulo()}</Text>
 
-          {/* SETA DIREITA */}
           <TouchableOpacity onPress={handleVoltar} style={styles.backButton}>
             <Image
               source={require("../../assets/images/header/arrow.png")}
@@ -87,7 +92,7 @@ function LayoutContent() {
         <Slot />
       </View>
 
-      {/* 🔹 global */}
+      {/* 🔹 FOOTER GLOBAL */}
       <View
         style={[
           styles.global,
@@ -98,26 +103,27 @@ function LayoutContent() {
         ]}
       >
         <TouchableOpacity onPress={() => router.push("/global/perfil")}>
-          <Ionicons name="person" size={26} color={theme.icon} />
+          <Ionicons name="person" size={35} color={theme.icon} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push("/global/dicionario")}>
-          <MaterialIcons name="menu-book" size={26} color={theme.icon} />
+          <MaterialIcons name="menu-book" size={35} color={theme.icon} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push("/global/home")}>
-          <Ionicons name="home" size={26} color={theme.icon} />
+          <Ionicons name="home" size={35} color={theme.icon} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push("/global/suporte")}>
-          <Ionicons name="help-circle" size={26} color={theme.icon} />
+          <Ionicons name="help-circle" size={35} color={theme.icon} />
         </TouchableOpacity>
 
-        {isSuporte && (
+        {/* 🔥 BOTÃO DARK MODE NA MESMA LINHA */}
+        {mostrarDarkMode && (
           <TouchableOpacity onPress={toggleDarkMode}>
             <FontAwesome5
               name={darkMode ? "sun" : "moon"}
-              size={22}
+              size={30}
               color={theme.icon}
               solid
             />
@@ -153,10 +159,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  logoMao: { width: 60, height: 60, marginRight: 10 },
-  logoTexto: { width: 180, height: 60 },
+  logoMao: {
+    width: 60,
+    height: 60,
+    marginRight: 10,
+  },
 
-  // 🔵 HEADER INTERNO AJUSTADO
+  logoTextoWrapper: {
+    width: 180,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  logoTexto: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+  },
+
   headerInterno: {
     backgroundColor: "#2D9CDB",
     paddingTop: 20,

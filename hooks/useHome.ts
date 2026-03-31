@@ -8,7 +8,7 @@ export function useHome() {
   const irParaAtividades = () => router.push("/global/atividades");
   const irParaPerfil = () => router.push("/global/perfil");
   const irParaSuporte = () => router.push("/global/suporte");
-  const irParaHome = () => router.replace("/global/home"); // evita empilhar várias homes
+  const irParaHome = () => router.replace("../global/home"); // evita empilhar várias homes
   const irParaDicionario = () => router.push("/global/dicionario");
 
   return {
