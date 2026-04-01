@@ -2,13 +2,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-<<<<<<< HEAD
-=======
-
-import { InputAnimado } from '../src/components/inputAnimado';
->>>>>>> origin/unidade_8
-import { useCadastro } from '../hooks/useCadastro';
 import { InputAnimado } from '../src/components/InputAnimado';
+import { useCadastro } from '../hooks/useCadastro';
+
 import { ThemeProvider, useTheme } from '../src/contexts/themeContext';
 import CadastroLayout from '../src/components/cadastroLayout';
 

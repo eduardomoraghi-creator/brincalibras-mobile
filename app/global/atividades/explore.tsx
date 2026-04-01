@@ -1,15 +1,15 @@
 import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
 
-import { Collapsible } from '../src/components/ui/collapsible';
-import { ExternalLink } from '../src/components/external-link';
-import ParallaxScrollView from '../src/components/parallax-scroll-view';
-import { ThemedText } from '../src/components/themed-text';
-import { ThemedView } from '../src/components/themed-view';
-import { IconSymbol } from '../src/components/ui/icon-symbol';
-import { Fonts } from '../src/constants/theme';
+import { Collapsible } from '../../../src/components/ui/collapsible';
+import { ExternalLink } from '../../../src/components/external-link';
+import ParallaxScrollView from '../../../src/components/parallax-scroll-view';
+import { ThemedText } from '../../../src/components/themed-text';
+import { ThemedView } from '../../../src/components/themed-view';
+import { IconSymbol } from '../../../src/components/ui/icon-symbol';
+import { Fonts } from '../../../src/constants/theme';
 
-export default function TabTwoScreen() {
+export default function ExploreScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -25,7 +25,7 @@ export default function TabTwoScreen() {
         <ThemedText
           type="title"
           style={{
-            fontFamily: Fonts.rounded,
+            fontFamily: Fonts.regular,
           }}>
           Explore
         </ThemedText>
@@ -80,7 +80,7 @@ export default function TabTwoScreen() {
           This template includes an example of an animated component. The{' '}
           <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
           the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
+          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.regular }}>
             react-native-reanimated
           </ThemedText>{' '}
           library to create a waving hand animation.

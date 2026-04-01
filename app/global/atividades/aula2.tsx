@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { Video, ResizeMode } from 'expo-av';
@@ -16,59 +17,81 @@ import useSlides from '@/hooks/useSlides';
 
 const { width } = Dimensions.get('window');
 
-export default function IntroducaoScreen() {
+export default function Aula2Screen() {
   const router = useRouter();
 
+  // ROTAS TIPADAS PARA EVITAR ERRO DE TYPE
+  const ROTAS = {
+    familia: '/global/atividades/familia' as const,
+    atividade2: '/global/atividades/atividade2' as const,
+  };
+
   const slides = [
-    { label: 'Filha', videoId: 'FrJLTByoeiM' },
-    { label: 'Filho', videoId: '8DVD6FkRU7s' },
-    { label: 'Pai', videoId: '94hJU7keujI' },
-    { label: 'Mãe', videoId: 'IljftNTMgqU' }
+    { label: 'Avô', videoId: 'Les9uc10LdY' },
+    { label: 'Avó', videoId: 'm0j6_6SG3F8' },
+    { label: 'Irmã', videoId: '2XK_ATK99Bg' },
+    { label: 'Irmão', videoId: 'lAG2qvy04ok' }
   ];
 
-  const { 
-    item: slideAtual, 
-    next, 
-    prev, 
-    length, 
-    maxVisited, 
+  const {
+    item: slideAtual,
+    next,
+    prev,
+    length,
+    maxVisited,
     isFinished,
-    isFirst, 
-    isLast   
-  } = useSlides(slides, { circular: false }); //desativado para o usuário não fazer o caminho inverso
+    isFirst,
+    isLast
+  } = useSlides(slides, { circular: false });
 
   const progressPercent = ((maxVisited + 1) / length) * 100;
 
   return (
     <SafeAreaProvider style={styles.screen}>
+
       <View style={styles.header}>
+
         <TouchableOpacity
           style={styles.back}
-          onPress={() => router.replace('/unidade8/familia')}
+          onPress={() =>
+            router.replace(ROTAS.familia)
+          }
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
-          <Ionicons name="arrow-back" size={22} color="#fff" />
+          <Ionicons
+            name="arrow-back"
+            size={22}
+            color="#fff"
+          />
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>Introdução - Pais e Filhos</Text>
+          <Text style={styles.headerTitle}>
+            Aula 2 - Avôs e irmãos
+          </Text>
         </View>
+
       </View>
 
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
+
         <Text style={styles.introText}>
           Reproduza os sinais até se acostumar com eles
         </Text>
 
         <View style={styles.mediaArea}>
+
           <View style={styles.mediaBox}>
+
             {slideAtual?.videoId ? (
+
               slideAtual.videoId.includes('http') ? (
+
                 <Video
-                  key={`native-${slideAtual.videoId}`} 
+                  key={`native-${slideAtual.videoId}`}
                   source={{ uri: slideAtual.videoId }}
                   style={styles.video}
                   useNativeControls
@@ -76,78 +99,144 @@ export default function IntroducaoScreen() {
                   shouldPlay
                   isLooping
                 />
+
               ) : (
-                <View style={{ width: '100%', aspectRatio: 16 / 9 }}>
+
+                <View
+                  style={{
+                    width: '100%',
+                    aspectRatio: 16 / 9
+                  }}
+                >
+
                   <YoutubePlayer
-                    key={`yt-${slideAtual.videoId}`} 
-                    height={width * 0.6} 
+                    key={`yt-${slideAtual.videoId}`}
+                    height={width * 0.6}
                     play={true}
                     videoId={slideAtual.videoId}
                   />
+
                 </View>
+
               )
+
             ) : (
-              <Text style={styles.mediaPlaceholder}>Carregando sinal...</Text>
+
+              <Text style={styles.mediaPlaceholder}>
+                Carregando sinal...
+              </Text>
+
             )}
+
           </View>
 
           <View style={styles.mediaControls}>
-            {/* Botão Voltar */}
+
             <TouchableOpacity
-              style={[styles.iconBtn, isFirst && { opacity: 0.3 }]}
+              style={[
+                styles.iconBtn,
+                isFirst && { opacity: 0.3 }
+              ]}
               onPress={prev}
               disabled={isFirst}
             >
-              <Ionicons name="chevron-back-circle" size={48} color={PURPLE} />
+              <Ionicons
+                name="chevron-back-circle"
+                size={48}
+                color={PURPLE}
+              />
             </TouchableOpacity>
 
             <View style={styles.wordBox}>
-              <Text style={styles.wordText}>{slideAtual?.label}</Text>
+              <Text style={styles.wordText}>
+                {slideAtual?.label}
+              </Text>
             </View>
 
-            {/* Botão Próximo */}
             <TouchableOpacity
-              style={[styles.iconBtn, isLast && { opacity: 0.3 }]}
+              style={[
+                styles.iconBtn,
+                isLast && { opacity: 0.3 }
+              ]}
               onPress={next}
               disabled={isLast}
             >
-              <Ionicons name="chevron-forward-circle" size={48} color={PURPLE} />
+              <Ionicons
+                name="chevron-forward-circle"
+                size={48}
+                color={PURPLE}
+              />
             </TouchableOpacity>
+
           </View>
+
         </View>
 
-        {/* Mensagem de Conclusão Dinâmica */}
         {isFinished ? (
-            <Text style={styles.completedMessage}>
-              ✨ Concluído! Você pode progredir para a próxima lição.
-            </Text>
-          ) : (
-            <Text style={[styles.introText, { marginTop: 20, marginBottom: 0 }]}>
-              Assista a todos os sinais para liberar a próxima lição.
-            </Text>
+
+          <Text style={styles.completedMessage}>
+            ✨ Concluído! Você pode progredir para a próxima lição.
+          </Text>
+
+        ) : (
+
+          <Text
+            style={[
+              styles.introText,
+              { marginTop: 20, marginBottom: 0 }
+            ]}
+          >
+            Assista a todos os sinais para liberar a próxima lição.
+          </Text>
+
         )}
 
         <View style={styles.progressContainer}>
+
           <View style={styles.progressInfo}>
-            <Text style={styles.progressText}>Progresso da lição</Text>
-            <Text style={styles.progressCount}>{`${maxVisited + 1} / ${length}`}</Text>
+
+            <Text style={styles.progressText}>
+              Progresso da lição
+            </Text>
+
+            <Text style={styles.progressCount}>
+              {`${maxVisited + 1} / ${length}`}
+            </Text>
+
           </View>
-          
+
           <View style={styles.progressTrack}>
-            <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
+
+            <View
+              style={[
+                styles.progressFill,
+                { width: `${progressPercent}%` }
+              ]}
+            />
+
           </View>
+
         </View>
 
         <TouchableOpacity
-          style={[styles.actionBtn, !isFinished && styles.disabledBtn]}
-          onPress={() => router.replace('/unidade8/atividade1')}
-          disabled={!isFinished} // Bloqueia o clique se não terminou
+          style={[
+            styles.actionBtn,
+            !isFinished && styles.disabledBtn
+          ]}
+          onPress={() =>
+            router.replace(ROTAS.atividade2)
+          }
+          disabled={!isFinished}
         >
           <Text style={styles.actionText}>
-            {isFinished ? "Continuar" : "Assista tudo para liberar"}
+            {isFinished
+              ? "Continuar"
+              : "Assista tudo para liberar"}
           </Text>
         </TouchableOpacity>
+
       </ScrollView>
+
     </SafeAreaProvider>
   );
 }
@@ -155,49 +244,57 @@ export default function IntroducaoScreen() {
 const PURPLE = '#6A04D1';
 
 const styles = StyleSheet.create({
+
   screen: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
+
   header: {
     height: 70,
-    backgroundColor: PURPLE
-  ,
+    backgroundColor: PURPLE,
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   back: {
     position: 'absolute',
     left: 12,
     zIndex: 10,
     padding: 8,
   },
+
   headerCenter: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+
   headerTitle: {
     color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 10,
   },
+
   contentContainer: {
     paddingHorizontal: 18,
     paddingTop: 18,
     paddingBottom: 40,
   },
+
   introText: {
     textAlign: 'center',
     marginBottom: 20,
     fontSize: 16,
     color: '#444',
   },
+
   mediaArea: {
     alignItems: 'center',
   },
+
   mediaBox: {
     width: '100%',
     aspectRatio: 16 / 9,
@@ -207,17 +304,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden', // Importante para o borderRadius funcionar com vídeo
+    overflow: 'hidden',
     elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
   },
+
   mediaPlaceholder: {
     color: '#fff',
     fontSize: 14,
   },
+
   mediaControls: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -226,20 +321,22 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 10,
   },
+
   iconBtn: {
     padding: 5,
   },
+
   wordBox: {
     flex: 1,
     marginHorizontal: 15,
     height: 60,
     borderRadius: 12,
-    backgroundColor: PURPLE
-  ,
+    backgroundColor: PURPLE,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 3,
   },
+
   wordText: {
     color: '#fff',
     fontSize: 22,
@@ -247,47 +344,49 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textTransform: 'uppercase',
   },
+
   actionBtn: {
     marginTop: 30,
-    backgroundColor: PURPLE
-  ,
+    backgroundColor: PURPLE,
     paddingVertical: 15,
     borderRadius: 12,
     alignItems: 'center',
-    shadowColor: PURPLE
-  ,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
     elevation: 5,
   },
+
   actionText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 18,
   },
+
   video: {
     width: '100%',
     height: '100%',
   },
+
   progressContainer: {
     marginTop: 25,
     paddingHorizontal: 10,
   },
+
   progressInfo: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
   },
+
   progressText: {
     color: '#666',
     fontSize: 14,
     fontWeight: '500',
   },
+
   progressCount: {
     color: PURPLE,
     fontWeight: '700',
   },
+
   progressTrack: {
     width: '100%',
     height: 10,
@@ -295,14 +394,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#E0E0E0',
     overflow: 'hidden',
   },
+
   progressFill: {
     height: '100%',
     backgroundColor: PURPLE,
     borderRadius: 10,
   },
+
   completedMessage: {
     textAlign: 'center',
-    color: '#2E7D32', // Verde para sucesso
+    color: '#2E7D32',
     fontWeight: '700',
     fontSize: 15,
     marginTop: 15,
@@ -312,9 +413,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#C8E6C9',
   },
+
   disabledBtn: {
-    backgroundColor: '#BDBDBD', // Cinza para desabilitado
-    shadowOpacity: 0,
+    backgroundColor: '#BDBDBD',
     elevation: 0,
   }
+
 });

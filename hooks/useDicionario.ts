@@ -21,44 +21,46 @@ export function useDicionario() {
       id: "1",
       palavra: "Casa",
       descricao: "Junte as pontas dos dedos formando um telhado.",
-      imagem: require("../assets/images/dicionario/sinalCasa.png"),
+      imagem: require("../assets/images/dicionario/casa.png"),
     },
     {
       id: "2",
       palavra: "Amor",
       descricao: "Cruze os braços sobre o peito.",
-      imagem: require("../assets/images/dicionario/sinalAmor.png"),
+      imagem: require("../assets/images/dicionario/amor.png"),
     },
-    /*{
+      {
       id: "3",
       palavra: "Escola",
       descricao: "Bata uma mão aberta sobre a outra.",
-      imagem: require("../assets/images/dicionario/sinalEscola.png"),
+      imagem: require("../assets/images/dicionario/escola.png"),
     },
     {
       id: "4",
       palavra: "Água",
       descricao: "Leve a mão em forma de W até a boca.",
-      imagem: require("../assets/images/dicionario/sinalAgua.png"),
+      imagem: require("../assets/images/dicionario/agua.png"),
     },
     {
       id: "5",
       palavra: "Família",
       descricao: "Faça um círculo com as mãos em frente ao corpo.",
-      imagem: require("../assets/images/dicionario/sinalFamilia.png"),
+      imagem: require("../assets/images/dicionario/familia.png"),
     },
     {
       id: "6",
       palavra: "Comer",
       descricao: "Leve a mão fechada até a boca.",
-      imagem: require("../assets/images/dicionario/sinalComer.png"),
+      imagem: require("../assets/images/dicionario/comer.png"),
     },
+    /*
     {
       id: "7",
       palavra: "Brincar",
       descricao: "Mova as mãos abertas alternadamente.",
-      imagem: require("../assets/images/dicionario/sinalBrincar.png"),
-    },*/
+      imagem: require("../assets/images/dicionario/brincar.png"),
+    },
+    */
   ];
 
   // 🔍 FILTRO

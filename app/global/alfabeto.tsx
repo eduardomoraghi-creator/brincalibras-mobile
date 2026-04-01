@@ -8,8 +8,10 @@ import { Ionicons } from '@expo/vector-icons';
 // Exemplo simples de dicionário
 const alfabeto = [
   { letra: 'A', imagem: require('../../assets/images/letras/A.png') },
+  { letra: 'E', imagem: require('../../assets/images/letras/E.png') },
   { letra: 'I', imagem: require('../../assets/images/letras/I.png') },
   { letra: 'O', imagem: require('../../assets/images/letras/O.png') },
+  { letra: 'U', imagem: require('../../assets/images/letras/U.png') },
 ];
 
 export default function Alfabeto() {

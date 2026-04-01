@@ -4,15 +4,10 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image, Linking } 
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-<<<<<<< HEAD
-import { InputAnimado } from '../src/components/InputAnimado'; // ✅ named import
-=======
-import { InputAnimado } from '../src/components/inputAnimado';
+import { InputAnimado } from '../src/components/InputAnimado'; 
 import { useLogin } from '../hooks/useLogin';
->>>>>>> origin/unidade_8
 import LoginLayout from '../src/components/loginLayout';
-import { useLogin } from '../hooks/useLogin';
-import { ThemeProvider, useTheme } from '../src/contexts/themeContext'; // ✅ named imports
+import { ThemeProvider, useTheme } from '../src/contexts/themeContext'; 
 
 export default function LoginScreen() {
   const router = useRouter();
