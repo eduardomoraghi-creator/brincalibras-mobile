@@ -22,8 +22,8 @@ export default function Aula2Screen() {
 
   // ROTAS TIPADAS PARA EVITAR ERRO DE TYPE
   const ROTAS = {
-    familia: '/global/atividades/familia' as const,
-    atividade2: '/global/atividades/atividade2' as const,
+    familia: '../global/atividades/familia/familia' as const,
+    atividade2: '../global/atividades/familia/atividade2' as const,
   };
 
   const slides = [

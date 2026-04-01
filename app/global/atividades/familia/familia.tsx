@@ -8,11 +8,11 @@ export default function FamiliaScreen() {
 
   // ROTAS TIPADAS
   const ROTAS = {
-    atividades: '/global/atividades' as const,
-    introducao: '/global/atividades/introducao' as const,
-    atividade1: '/global/atividades/atividade1' as const,
-    aula2: '/global/atividades/aula2' as const,
-    atividade2: '/global/atividades/atividade2' as const,
+    atividades: '../global/atividades/familia' as const,
+    introducao: '../global/atividades/familia/introducao' as const,
+    atividade1: '../global/atividades/familia/atividade1' as const,
+    aula2: '../global/atividades/familia/aula2' as const,
+    atividade2: '../global/atividades/familia/atividade2' as const,
   };
 
   const cards = [

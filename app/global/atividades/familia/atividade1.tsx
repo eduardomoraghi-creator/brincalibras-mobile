@@ -4,7 +4,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQuiz } from '../../../hooks/useQuiz';
+import { useQuiz } from '../../../../hooks/useQuiz';
 
 const { width } = Dimensions.get('window');
 

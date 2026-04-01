@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { TreeSlot } from '../../../src/components/treeSlot';
+import { TreeSlot } from '../../../../src/components/treeSlot';
 import { useTreeActivity } from '@/hooks/useTreeActivity';
 
 // Cores principais
@@ -58,7 +58,7 @@ export default function Atividade2Screen() {
 
           <TouchableOpacity
             style={styles.finishBtn}
-            onPress={() => router.replace('/global/atividades/familia')}
+            onPress={() => router.replace('../global/atividades/familia/familia')}
           >
             <Text style={styles.finishBtnText}>VOLTAR PARA A UNIDADE</Text>
             <Ionicons name="home" size={20} color="#fff" style={{ marginLeft: 10 }} />
@@ -76,7 +76,7 @@ export default function Atividade2Screen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => router.push('/global/atividades/familia')}
+          onPress={() => router.push('../global/atividades/familia/familia')}
           style={styles.back}
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />

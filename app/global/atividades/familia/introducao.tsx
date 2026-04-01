@@ -22,8 +22,8 @@ export default function IntroducaoScreen() {
 
   // ROTAS TIPADAS
   const ROTAS = {
-    familia: "/global/atividades/familia" as const,
-    atividade1: "/global/atividades/atividade1" as const,
+    familia: "../global/atividades/familia/familia" as const,
+    atividade1: "../global/atividades/familia/atividade1" as const,
   };
 
   const slides = [
