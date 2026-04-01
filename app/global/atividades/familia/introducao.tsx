@@ -54,7 +54,6 @@ export default function IntroducaoScreen() {
           onPress={() => router.replace(ROTAS.familia)}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
-          <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>

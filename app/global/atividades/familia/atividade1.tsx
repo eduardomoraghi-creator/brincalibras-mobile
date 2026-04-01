@@ -68,7 +68,8 @@ export default function Atividade1Screen() {
 
           <TouchableOpacity
             style={styles.finishBtn}
-            onPress={() => router.replace('/global/atividades/familia')}
+            // ROTA AJUSTADA: volta para a tela da unidade "familia"
+            onPress={() => router.replace('/global/atividades/familia/familia')}
           >
             <Text style={styles.finishBtnText}>VOLTAR PARA A UNIDADE</Text>
             <Ionicons name="home" size={20} color="#fff" style={{ marginLeft: 10 }} />
@@ -83,7 +84,10 @@ export default function Atividade1Screen() {
     <SafeAreaView style={[styles.screen, { backgroundColor: BACKGROUND }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/global/atividades/familia')}>
+        <TouchableOpacity
+          // ROTA AJUSTADA: fecha e volta para a tela "familia"
+          onPress={() => router.push('/global/atividades/familia/familia')}
+        >
           <Ionicons name="close" size={28} color="#fff" />
         </TouchableOpacity>
 
@@ -143,7 +147,6 @@ export default function Atividade1Screen() {
             <Text style={styles.nextBtnText}>
               {isCorrect ? "ACERTOU! PRÓXIMO" : "OPS! PRÓXIMO"}
             </Text>
-            <Ionicons name="arrow-forward" size={20} color="#fff" />
           </TouchableOpacity>
         )}
       </View>

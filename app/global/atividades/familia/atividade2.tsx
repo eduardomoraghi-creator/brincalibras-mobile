@@ -76,7 +76,7 @@ export default function Atividade2Screen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => router.push('../global/atividades/familia/familia')}
+          onPress={() => router.push('../global/atividades/familia')}
           style={styles.back}
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />

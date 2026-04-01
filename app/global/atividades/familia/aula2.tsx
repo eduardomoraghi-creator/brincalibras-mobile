@@ -20,10 +20,10 @@ const { width } = Dimensions.get('window');
 export default function Aula2Screen() {
   const router = useRouter();
 
-  // ROTAS TIPADAS PARA EVITAR ERRO DE TYPE
+  // ROTAS AJUSTADAS (ABSOLUTAS)
   const ROTAS = {
-    familia: '../global/atividades/familia/familia' as const,
-    atividade2: '../global/atividades/familia/atividade2' as const,
+    familia: '/global/atividades/familia/familia' as const, // ✅ ROTA AJUSTADA
+    atividade2: '/global/atividades/familia/atividade2' as const, // ✅ ROTA AJUSTADA
   };
 
   const slides = [
@@ -51,19 +51,7 @@ export default function Aula2Screen() {
 
       <View style={styles.header}>
 
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() =>
-            router.replace(ROTAS.familia)
-          }
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-        >
-          <Ionicons
-            name="arrow-back"
-            size={22}
-            color="#fff"
-          />
-        </TouchableOpacity>
+        {/* ❌ REMOVIDO BOTÃO DE VOLTAR (arrow-back) */}
 
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>
@@ -102,12 +90,7 @@ export default function Aula2Screen() {
 
               ) : (
 
-                <View
-                  style={{
-                    width: '100%',
-                    aspectRatio: 16 / 9
-                  }}
-                >
+                <View style={{ width: '100%', aspectRatio: 16 / 9 }}>
 
                   <YoutubePlayer
                     key={`yt-${slideAtual.videoId}`}
@@ -257,13 +240,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  back: {
-    position: 'absolute',
-    left: 12,
-    zIndex: 10,
-    padding: 8,
   },
 
   headerCenter: {

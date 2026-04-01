@@ -1,35 +1,61 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export default function FamiliaScreen() {
   const router = useRouter();
 
   // ROTAS TIPADAS
   const ROTAS = {
-    atividades: '../global/atividades/familia' as const,
-    introducao: '../global/atividades/familia/introducao' as const,
-    atividade1: '../global/atividades/familia/atividade1' as const,
-    aula2: '../global/atividades/familia/aula2' as const,
-    atividade2: '../global/atividades/familia/atividade2' as const,
+    atividades: "/global/atividades" as const, // ajuste aqui se sua tela pai tiver outro nome
+    introducao: "/global/atividades/familia/introducao" as const,
+    atividade1: "/global/atividades/familia/atividade1" as const,
+    aula2: "/global/atividades/familia/aula2" as const,
+    atividade2: "/global/atividades/familia/atividade2" as const,
   };
 
   const cards = [
-    { id: 'intro', title: 'Introdução - Pais e Filhos', progress: 100, link: ROTAS.introducao },
-    { id: 'a1', title: 'Atividade 1 - Associar Sinais', progress: 60, link: ROTAS.atividade1 },
-    { id: 'aula2', title: 'Aula 2 - Avôs e irmãos', progress: 0, link: ROTAS.aula2 },
-    { id: 'a2', title: 'Atividade 2 - Árvore Genealógica', progress: 30, link: ROTAS.atividade2 },
+    {
+      id: "intro",
+      title: "Introdução - Pais e Filhos",
+      progress: 100,
+      link: ROTAS.introducao,
+    },
+    {
+      id: "a1",
+      title: "Atividade 1 - Associar Sinais",
+      progress: 60,
+      link: ROTAS.atividade1,
+    },
+    {
+      id: "aula2",
+      title: "Aula 2 - Avôs e irmãos",
+      progress: 0,
+      link: ROTAS.aula2,
+    },
+    {
+      id: "a2",
+      title: "Atividade 2 - Árvore Genealógica",
+      progress: 30,
+      link: ROTAS.atividade2,
+    },
   ];
 
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.back} 
+        <TouchableOpacity
+          style={styles.back}
           onPress={() => router.replace(ROTAS.atividades)}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          accessibilityLabel="Voltar"    
+          accessibilityLabel="Voltar"
         >
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
@@ -41,7 +67,7 @@ export default function FamiliaScreen() {
       </View>
 
       <ScrollView style={styles.content}>
-        {cards.map(card => (
+        {cards.map((card) => (
           <View key={card.id} style={styles.card}>
             <View style={styles.cardRow}>
               <MaterialIcons name="people" size={28} color={PURPLE} />
@@ -55,7 +81,9 @@ export default function FamiliaScreen() {
               </View>
 
               <View style={styles.progressTrack}>
-                <View style={[styles.progressFill, { width: `${card.progress}%` }]} />
+                <View
+                  style={[styles.progressFill, { width: `${card.progress}%` }]}
+                />
               </View>
             </View>
 
@@ -72,34 +100,34 @@ export default function FamiliaScreen() {
   );
 }
 
-const PURPLE = '#6A04D1';
+const PURPLE = "#6A04D1";
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
     height: 70,
     backgroundColor: PURPLE,
     paddingHorizontal: 16,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   back: {
-    position: 'absolute',
+    position: "absolute",
     left: 12,
     zIndex: 10,
     padding: 8,
   },
   headerCenter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   headerTitle: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 10,
   },
   content: {
@@ -107,7 +135,7 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     borderWidth: 2,
     borderColor: PURPLE,
@@ -117,12 +145,12 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   cardRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   cardTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     marginLeft: 12,
   },
   progressContainer: {
@@ -130,28 +158,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   progressInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 8,
   },
   progressText: {
-    color: '#666',
+    color: "#666",
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   progressCount: {
     color: PURPLE,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   progressTrack: {
-    width: '100%',
+    width: "100%",
     height: 10,
     borderRadius: 10,
-    backgroundColor: '#E0E0E0',
-    overflow: 'hidden',
+    backgroundColor: "#E0E0E0",
+    overflow: "hidden",
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     backgroundColor: PURPLE,
     borderRadius: 10,
   },
@@ -160,10 +188,10 @@ const styles = StyleSheet.create({
     backgroundColor: PURPLE,
     paddingVertical: 10,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   actionText: {
-    color: '#fff',
-    fontWeight: '700',
+    color: "#fff",
+    fontWeight: "700",
   },
 });

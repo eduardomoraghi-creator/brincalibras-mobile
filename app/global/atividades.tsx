@@ -22,7 +22,7 @@ export default function AtividadesScreen() {
     {
       id: 8,
       imagem: require('../../assets/images/atividades/familia.png'),
-      path: '/global/atividades/familia' as const,
+      path: '../global/atividades/familia/familia' as const,
     },
   ];
 
