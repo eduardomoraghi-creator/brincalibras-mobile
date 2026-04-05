@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Alert } from "react-native";
 import { useRouter } from "expo-router";
+import { getDictionaryItems } from "../src/data/librasHelpers";
 
 type Palavra = {
   id: string;
@@ -16,56 +17,11 @@ export function useDicionario() {
   const [favoritos, setFavoritos] = useState<string[]>([]);
 
   // 📚 BASE DO DICIONÁRIO
-  const palavras: Palavra[] = [
-    {
-      id: "1",
-      palavra: "Casa",
-      descricao: "Junte as pontas dos dedos formando um telhado.",
-      imagem: require("../assets/images/dicionario/casa.png"),
-    },
-    {
-      id: "2",
-      palavra: "Amor",
-      descricao: "Cruze os braços sobre o peito.",
-      imagem: require("../assets/images/dicionario/amor.png"),
-    },
-      {
-      id: "3",
-      palavra: "Escola",
-      descricao: "Bata uma mão aberta sobre a outra.",
-      imagem: require("../assets/images/dicionario/escola.png"),
-    },
-    {
-      id: "4",
-      palavra: "Água",
-      descricao: "Leve a mão em forma de W até a boca.",
-      imagem: require("../assets/images/dicionario/agua.png"),
-    },
-    {
-      id: "5",
-      palavra: "Família",
-      descricao: "Faça um círculo com as mãos em frente ao corpo.",
-      imagem: require("../assets/images/dicionario/familia.png"),
-    },
-    {
-      id: "6",
-      palavra: "Comer",
-      descricao: "Leve a mão fechada até a boca.",
-      imagem: require("../assets/images/dicionario/comer.png"),
-    },
-    /*
-    {
-      id: "7",
-      palavra: "Brincar",
-      descricao: "Mova as mãos abertas alternadamente.",
-      imagem: require("../assets/images/dicionario/brincar.png"),
-    },
-    */
-  ];
+  const palavras: Palavra[] = useMemo(() => getDictionaryItems(), []);
 
   // 🔍 FILTRO
   const dadosFiltrados = palavras.filter((item) =>
-    item.palavra.toLowerCase().includes(busca.toLowerCase()),
+    item.palavra.toLowerCase().includes(busca.toLowerCase().trim()),
   );
 
   // ⭐ FAVORITOS
@@ -77,14 +33,15 @@ export function useDicionario() {
     }
   };
 
-  // 🔥 BASE DE BUSCA (igual suporte)
+  // 🔥 BASE DE BUSCA
   const baseBusca = palavras.map((p) => ({
+    id: p.id,
     palavra: p.palavra,
     rota: "/global/dicionario",
   }));
 
   const sugestoes = baseBusca.filter((item) =>
-    item.palavra.toLowerCase().includes(busca.toLowerCase()),
+    item.palavra.toLowerCase().includes(busca.toLowerCase().trim()),
   );
 
   const navegarPara = () => {
@@ -94,13 +51,18 @@ export function useDicionario() {
   const navegarPorBusca = () => {
     const termo = busca.toLowerCase().trim();
 
+    if (!termo) return;
+
     const encontrada = palavras.find((item) =>
       item.palavra.toLowerCase().includes(termo),
     );
 
     if (!encontrada) {
       Alert.alert("Não encontrado", "Nenhuma palavra corresponde à busca.");
+      return;
     }
+
+    setBusca(encontrada.palavra);
   };
 
   return {

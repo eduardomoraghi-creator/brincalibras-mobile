@@ -1,5 +1,3 @@
-// app/global/suporte.tsx
-
 import React from "react";
 import {
   View,
@@ -9,17 +7,11 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-
 import { Ionicons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
-
-import { useRouter } from "expo-router";
-
 import { useTheme } from "../../src/contexts/themeContext";
 import { useSuporte } from "../../hooks/useSuporte";
 
 export default function SuporteScreen() {
-  const router = useRouter();
-
   const {
     email,
     abrirWhatsApp,
@@ -38,59 +30,98 @@ export default function SuporteScreen() {
     navegarPorBusca,
   } = useSuporte();
 
-  const { theme } = useTheme();
+  const { theme, darkMode } = useTheme();
+
+  const pageBackground = darkMode ? "#3A3A3A" : theme.background;
+
+  const searchBackground = darkMode ? "#F2F2F2" : "#FFFFFF";
+  const searchTextColor = darkMode ? "#2D9CDB" : theme.text;
+  const searchPlaceholderColor = "#8E8E8E";
+
+  const supportTextColor = darkMode ? "#FFFFFF" : theme.text;
+
+  const contactBackground = darkMode ? "#F2F2F2" : "#000000";
+  const contactTextColor = darkMode ? "#2D9CDB" : "#FFFFFF";
+  const contactIconColor = darkMode ? "#2D9CDB" : "#FFFFFF";
+
+  const faqBackground = darkMode ? "#EAEAEA" : "#595959";
+  const faqTitleColor = darkMode ? "#2D9CDB" : "#FFFFFF";
+  const faqItemColor = darkMode ? "#2D9CDB" : "#FFFFFF";
+  const faqDividerColor = darkMode ? "#2D9CDB" : "#CCCCCC";
+
+  const suggestionBackground = darkMode ? "#EAEAEA" : theme.card;
+  const suggestionTextColor = darkMode ? "#2D9CDB" : theme.text;
+  const suggestionBorderColor = darkMode ? "#D0D0D0" : "#E0E0E0";
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background }}>
-      {/* HEADER COMPLEMENTO */}
+    <View style={[styles.screen, { backgroundColor: pageBackground }]}>
+      {/* HEADER COMPLEMENTAR */}
       <View style={styles.headerComplemento}>
         <View style={styles.searchWrapper}>
-          <View style={[styles.searchBox, { backgroundColor: theme.card }]}>
+          <View
+            style={[styles.searchBox, { backgroundColor: searchBackground }]}
+          >
             <Ionicons name="search" size={20} color="#8E8E8E" />
+
             <TextInput
-              style={[styles.searchInput, { color: theme.text }]}
-              placeholder="Ex: perfil, jogos, atividades, dicionário..."
-              placeholderTextColor={theme.text}
+              style={[
+                styles.searchInput,
+                {
+                  color: searchTextColor,
+                  borderWidth: 0, // ✅ remove qualquer borda
+                },
+              ]}
+              placeholder="Ex: conta, login, atividades..."
+              placeholderTextColor={searchPlaceholderColor}
               value={busca}
               onChangeText={setBusca}
               onSubmitEditing={navegarPorBusca}
+              underlineColorAndroid="transparent" 
             />
           </View>
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.container}>
-        {/* SUGESTÕES MELHORADAS */}
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* SUGESTÕES */}
         {busca.length > 0 && (
-          <View style={[styles.sugestoesBox, { backgroundColor: theme.card }]}>
+          <View
+            style={[
+              styles.sugestoesBox,
+              { backgroundColor: suggestionBackground },
+            ]}
+          >
             {sugestoes.length > 0 ? (
               sugestoes.slice(0, 5).map((item, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={styles.sugestaoCard}
+                  style={[
+                    styles.sugestaoCard,
+                    { borderColor: suggestionBorderColor },
+                  ]}
                   activeOpacity={0.7}
                   onPress={() => navegarPara(item.rota)}
                 >
-                  <Ionicons
-                    name="search-outline"
-                    size={18}
-                    color={theme.primary}
-                    style={styles.sugestaoIcon}
-                  />
+                  <Ionicons name="search-outline" size={18} color="#2D9CDB" />
 
-                  <Text style={[styles.sugestaoTexto, { color: theme.text }]}>
+                  <Text
+                    style={[
+                      styles.sugestaoTexto,
+                      { color: suggestionTextColor },
+                    ]}
+                  >
                     {item.palavra}
                   </Text>
 
-                  <Ionicons name="chevron-forward" size={18} color="#999" />
+                  <Ionicons name="chevron-forward" size={18} color="#999999" />
                 </TouchableOpacity>
               ))
             ) : (
               <Text
-                style={{
-                  padding: 12,
-                  color: theme.text,
-                }}
+                style={[styles.sugestaoVazia, { color: suggestionTextColor }]}
               >
                 Nenhuma sugestão encontrada
               </Text>
@@ -98,73 +129,116 @@ export default function SuporteScreen() {
           </View>
         )}
 
-        {/* RESTANTE DO CONTEÚDO */}
+        {/* CONTEÚDO */}
         {perguntaSelecionada ? (
-          <View style={[styles.card, { backgroundColor: theme.card }]}>
-            <Text style={[styles.cardTitle, { color: theme.primary }]}>
+          <View style={[styles.card, { backgroundColor: faqBackground }]}>
+            <Text style={[styles.cardTitle, { color: faqTitleColor }]}>
               {perguntaSelecionada.pergunta}
             </Text>
 
-            <Text style={[styles.resposta, { color: theme.primary }]}>
+            <Text style={[styles.resposta, { color: faqItemColor }]}>
               {perguntaSelecionada.resposta}
             </Text>
 
             <TouchableOpacity onPress={voltarFAQ}>
-              <Text style={[styles.verMais, { color: theme.primary }]}>
+              <Text style={[styles.verMais, { color: faqTitleColor }]}>
                 Voltar
               </Text>
             </TouchableOpacity>
           </View>
         ) : (
           <>
-            <Text style={[styles.subTitle, { color: theme.text }]}>
+            <Text style={[styles.subTitle, { color: supportTextColor }]}>
               Fale com um dos nossos analistas:
             </Text>
 
+            {/* WHATS + TELEFONE */}
             <View style={styles.row}>
               <TouchableOpacity
-                style={[styles.contatoBtn, styles.linkBtn]}
+                style={[
+                  styles.contatoBtn,
+                  { backgroundColor: contactBackground },
+                ]}
                 onPress={abrirWhatsApp}
               >
-                <FontAwesome name="whatsapp" size={18} color="#FFF" />
-                <Text style={styles.contatoText}>(11) 11111-1111</Text>
+                <FontAwesome
+                  name="whatsapp"
+                  size={20}
+                  color={contactIconColor}
+                />
+                <Text style={[styles.contatoText, { color: contactTextColor }]}>
+                  (11) 11111-1111
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.contatoBtn, styles.linkBtn]}
+                style={[
+                  styles.contatoBtn,
+                  { backgroundColor: contactBackground },
+                ]}
                 onPress={ligar}
               >
-                <MaterialIcons name="phone" size={18} color="#FFF" />
-                <Text style={styles.contatoText}>(11) 11111-1111</Text>
+                <MaterialIcons
+                  name="local-phone"
+                  size={20}
+                  color={contactIconColor}
+                />
+                <Text style={[styles.contatoText, { color: contactTextColor }]}>
+                  (11) 11111-1111
+                </Text>
               </TouchableOpacity>
             </View>
 
+            {/* EMAIL */}
             <TouchableOpacity
-              style={[styles.contatoBtn, styles.linkBtn, styles.emailBtn]}
+              style={[
+                styles.contatoBtnEmail,
+                { backgroundColor: contactBackground },
+              ]}
               onPress={enviarEmail}
             >
-              <MaterialIcons name="email" size={18} color="#FFF" />
-              <Text style={styles.contatoText}>{email}</Text>
+              <MaterialIcons
+                name="mail-outline"
+                size={22}
+                color={contactIconColor}
+              />
+              <Text style={[styles.contatoText, { color: contactTextColor }]}>
+                {email}
+              </Text>
             </TouchableOpacity>
 
-            <View style={[styles.card, styles.cardFAQ]}>
-              <Text style={[styles.cardTitle, { color: "#FFFFFF" }]}>
+            {/* FAQ */}
+            <View
+              style={[
+                styles.card,
+                styles.cardFAQ,
+                { backgroundColor: faqBackground },
+              ]}
+            >
+              <Text style={[styles.cardTitle, { color: faqTitleColor }]}>
                 Perguntas frequentes
               </Text>
 
               {perguntasVisiveis.map((item, index) => (
                 <View key={index}>
                   <TouchableOpacity onPress={() => abrirPergunta(item)}>
-                    <Text style={styles.item}>{item.pergunta}</Text>
+                    <Text style={[styles.item, { color: faqItemColor }]}>
+                      {item.pergunta}
+                    </Text>
                   </TouchableOpacity>
 
-                  <View style={styles.divider} />
+                  <View
+                    style={[
+                      styles.divider,
+                      { backgroundColor: faqDividerColor },
+                    ]}
+                  />
                 </View>
               ))}
 
               {!mostrarMais && (
                 <TouchableOpacity onPress={() => setMostrarMais(true)}>
-                  <Text style={[styles.verMais, { color: "#FFFFFF" }]}>
+                  <Text style={[styles.verMais, { color: faqTitleColor }]}>
                     Ver mais...
                   </Text>
                 </TouchableOpacity>
@@ -178,10 +252,7 @@ export default function SuporteScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 10,
-    paddingBottom: 20,
-  },
+  screen: { flex: 1 },
 
   headerComplemento: {
     backgroundColor: "#2D9CDB",
@@ -204,12 +275,18 @@ const styles = StyleSheet.create({
   searchInput: {
     marginLeft: 10,
     flex: 1,
+    fontSize: 14,
+  },
+
+  container: {
+    paddingTop: 16,
+    paddingBottom: 24,
   },
 
   sugestoesBox: {
     marginHorizontal: 20,
     borderRadius: 16,
-    marginTop: 12,
+    marginTop: -4,
     marginBottom: 12,
     paddingVertical: 4,
     elevation: 3,
@@ -221,90 +298,102 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 14,
     borderBottomWidth: 0.5,
-    borderColor: "#E0E0E0",
-  },
-
-  sugestaoIcon: {
-    marginRight: 10,
   },
 
   sugestaoTexto: {
     flex: 1,
     fontSize: 15,
     fontWeight: "500",
+    marginLeft: 10,
+  },
+
+  sugestaoVazia: {
+    padding: 12,
+    fontSize: 14,
   },
 
   subTitle: {
     textAlign: "center",
-    marginBottom: 15,
+    marginBottom: 16,
+    marginTop: 2,
+    fontSize: 15,
+    fontWeight: "700",
   },
 
   row: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
     gap: 10,
+    marginBottom: 12,
   },
 
   contatoBtn: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
-    borderRadius: 25,
+    justifyContent: "center",
+    paddingVertical: 14,
+    borderRadius: 999,
     gap: 8,
-    marginHorizontal: 25,
-    marginVertical: 10,
+  },
+
+  contatoBtnEmail: {
+    alignSelf: "center",
+    width: "88%",
+    paddingVertical: 14,
+    borderRadius: 999,
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    marginBottom: 18,
   },
 
   contatoText: {
-    color: "#FFFFFF",
-    fontSize: 13,
-  },
-
-  linkBtn: {
-    backgroundColor: "#000",
-  },
-
-  emailBtn: {
-    alignSelf: "center",
-    marginBottom: 20,
+    fontSize: 14,
+    fontWeight: "600",
   },
 
   card: {
     borderRadius: 20,
-    padding: 15,
+    padding: 16,
     marginBottom: 15,
     marginHorizontal: 20,
+    elevation: 4,
   },
 
   cardFAQ: {
-    backgroundColor: "#595959",
+    paddingTop: 14,
   },
 
   cardTitle: {
     textAlign: "center",
     marginBottom: 10,
     fontWeight: "bold",
+    fontSize: 16,
   },
 
   item: {
     textAlign: "center",
-    paddingVertical: 10,
-    color: "#FFFFFF",
+    paddingVertical: 14,
+    fontSize: 15,
   },
 
   resposta: {
     textAlign: "center",
     marginVertical: 15,
+    fontSize: 15,
   },
 
   divider: {
     height: 1,
-    backgroundColor: "#ccc",
+    marginHorizontal: 8,
   },
 
   verMais: {
     textAlign: "center",
-    marginTop: 10,
+    marginTop: 14,
     fontWeight: "bold",
+    fontSize: 15,
   },
 });

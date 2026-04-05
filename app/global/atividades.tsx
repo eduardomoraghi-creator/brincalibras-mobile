@@ -9,34 +9,44 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useTheme } from '../../src/contexts/themeContext';
 
 const CARD_SIZE = 150;
 const ICON_SIZE = 110;
-const BACKGROUND = '#FFFFFF';
-const TEXT_COLOR = '#000000';
 
 export default function AtividadesScreen() {
   const router = useRouter();
+  const { theme, darkMode } = useTheme();
 
   const atividades = [
     {
       id: 8,
       imagem: require('../../assets/images/atividades/familia.png'),
-      path: '../global/atividades/familia/familia' as const,
+      path: '/global/atividades/familia/familia' as const, // ✅ CORRIGIDO
     },
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <View
+        style={[
+          styles.header,
+          {
+            backgroundColor: theme.background,
+            borderBottomColor: theme.border || '#ddd',
+          },
+        ]}
+      >
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={TEXT_COLOR} />
+          <Ionicons name="arrow-back" size={24} color={theme.text} />
         </TouchableOpacity>
 
         <View style={styles.headerSpacer} />
       </View>
 
-      <Text style={styles.screenTitle}>Atividades</Text>
+      <Text style={[styles.screenTitle, { color: theme.text }]}>
+        Atividades
+      </Text>
 
       <ScrollView
         contentContainerStyle={styles.content}
@@ -46,7 +56,13 @@ export default function AtividadesScreen() {
           {atividades.map((item) => (
             <TouchableOpacity
               key={item.id}
-              style={styles.card}
+              style={[
+                styles.card,
+                {
+                  backgroundColor: theme.card,
+                  shadowColor: darkMode ? '#000' : '#000',
+                },
+              ]}
               activeOpacity={0.8}
               onPress={() => router.push(item.path)}
             >
@@ -66,7 +82,6 @@ export default function AtividadesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BACKGROUND,
   },
   header: {
     flexDirection: 'row',
@@ -75,7 +90,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 40,
     paddingBottom: 10,
-    backgroundColor: BACKGROUND,
   },
   backButton: {
     padding: 4,
@@ -87,7 +101,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     marginVertical: 15,
-    color: TEXT_COLOR,
     fontWeight: 'bold',
   },
   content: {
@@ -106,8 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: BACKGROUND,
-    shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 3,

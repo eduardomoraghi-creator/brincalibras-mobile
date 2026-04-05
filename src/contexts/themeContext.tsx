@@ -1,4 +1,3 @@
-// src/contexts/ThemeContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export type Theme = {
@@ -12,10 +11,9 @@ export type Theme = {
   icon: string;
   text: string;
   banner: string;
-  primary: string; 
-  button?: string;      
-  buttonText?: string;   
-
+  primary: string;
+  button?: string;
+  buttonText?: string;
 };
 
 const lightTheme: Theme = {
@@ -29,21 +27,25 @@ const lightTheme: Theme = {
   icon: "#3A8FB7",
   text: "#000000",
   banner: "#E91E63",
-  primary: "#3A8FB7", // ✅ adiciona aqui
+  primary: "#3A8FB7",
+  button: "#3A8FB7",
+  buttonText: "#FFFFFF",
 };
 
 const darkTheme: Theme = {
-  background: "#2C2C2C",
-  header: "#3F3F3F",
+  background: "#2F2F2F",
+  header: "#3A8FB7",
   logo: "#FFFFFF",
   curve: "#5DADE2",
-  card: "#444444",
+  card: "#EAEAEA",
   border: "transparent",
   footer: "#3F3F3F",
   icon: "#FFFFFF",
   text: "#FFFFFF",
   banner: "#880E4F",
-  primary: "#FFFFFF", // ✅ adiciona aqui
+  primary: "#2D9CDB",
+  button: "#EAEAEA",
+  buttonText: "#2D9CDB",
 };
 
 type ThemeContextType = {
@@ -65,7 +67,11 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ThemeContext.Provider
-      value={{ darkMode, theme: darkMode ? darkTheme : lightTheme, toggleDarkMode }}
+      value={{
+        darkMode,
+        theme: darkMode ? darkTheme : lightTheme,
+        toggleDarkMode,
+      }}
     >
       {children}
     </ThemeContext.Provider>

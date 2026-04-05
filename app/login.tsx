@@ -37,17 +37,24 @@ function LoginContent({ router }: { router: ReturnType<typeof useRouter> }) {
     animateFocus
   } = useLogin();
 
+  const handleLogin = async () => {
+    const sucesso = await validarESubmeter();
+    if (sucesso) {
+      router.replace('/capa'); // vai para a tela de capa
+    }
+  };
+
   return (
     <>
       {/* HEADER */}
       <View style={[styles.header, { backgroundColor: theme.background }]}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/images/homeLight/mao.png')}
+            source={require('../assets/images/home/mao.png')}
             style={styles.logoMao}
           />
           <Image
-            source={require('../assets/images/homeLight/BrincaLibras.png')}
+            source={require('../assets/images/home/BrincaLibras.png')}
             style={styles.logoTexto}
           />
         </View>
@@ -124,7 +131,7 @@ function LoginContent({ router }: { router: ReturnType<typeof useRouter> }) {
           {/* BOTÕES */}
           <TouchableOpacity
             style={[styles.button, { backgroundColor: theme.primary }]}
-            onPress={validarESubmeter}
+            onPress={handleLogin}
           >
             <Text style={[styles.buttonText, { color: theme.text }]}>
               Entrar

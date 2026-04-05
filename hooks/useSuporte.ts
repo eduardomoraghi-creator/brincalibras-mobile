@@ -22,7 +22,6 @@ export function useSuporte() {
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
-  // 🔥 BASE DE BUSCA INTELIGENTE
   const baseBusca = [
     { palavra: "home", rota: "/global/home" },
     { palavra: "inicio", rota: "/global/home" },
@@ -44,33 +43,31 @@ export function useSuporte() {
 
     { palavra: "suporte", rota: "/global/suporte" },
     { palavra: "ajuda", rota: "/global/suporte" },
-
-    { palavra: "suporte", rota: "/global/suporte" },
-    { palavra: "ajuda", rota: "/global/suporte" },
-
-    { palavra: "suporte", rota: "/global/suporte" },
-    { palavra: "ajuda", rota: "/global/suporte" },
-
-    { palavra: "suporte", rota: "/global/suporte" },
-    { palavra: "ajuda", rota: "/global/suporte" },
   ];
 
-  // 🔍 FILTRO DINÂMICO
-  const sugestoes = baseBusca.filter((item) =>
-    item.palavra.toLowerCase().includes(busca.toLowerCase()),
-  );
+  const sugestoes = baseBusca
+    .filter((item) =>
+      item.palavra.toLowerCase().includes(busca.toLowerCase().trim())
+    )
+    .filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex(
+          (i) => i.palavra.toLowerCase() === item.palavra.toLowerCase()
+        )
+    );
 
-  // 🚀 NAVEGAÇÃO DIRETA
   const navegarPara = (rota: string) => {
     router.push(rota as any);
     setBusca("");
   };
 
-  // 🔎 BUSCA MANUAL (enter)
   const navegarPorBusca = () => {
     const termo = busca.toLowerCase().trim();
 
-    const encontrada = baseBusca.find((item) => termo.includes(item.palavra));
+    const encontrada = baseBusca.find((item) =>
+      termo.includes(item.palavra.toLowerCase())
+    );
 
     if (encontrada) {
       navegarPara(encontrada.rota);
@@ -79,12 +76,15 @@ export function useSuporte() {
     }
   };
 
-  // CONTATOS
   const abrirWhatsApp = async () => {
     const url = `https://wa.me/${telefone}`;
     const supported = await Linking.canOpenURL(url);
-    if (supported) Linking.openURL(url);
-    else Alert.alert("Erro", "WhatsApp não disponível");
+
+    if (supported) {
+      Linking.openURL(url);
+    } else {
+      Alert.alert("Erro", "WhatsApp não disponível");
+    }
   };
 
   const ligar = async () => {
@@ -95,7 +95,6 @@ export function useSuporte() {
     Linking.openURL(`mailto:${email}`);
   };
 
-  // FAQ
   const perguntas: Pergunta[] = [
     {
       pergunta: "Como compartilhar o meu progresso?",
@@ -148,8 +147,6 @@ export function useSuporte() {
     perguntaSelecionada,
     abrirPergunta,
     voltarFAQ,
-
-    // 🔥 BUSCA
     busca,
     setBusca,
     sugestoes,

@@ -1,76 +1,56 @@
-import React from 'react';
+import React from "react";
 import {
   View,
-  Text,
-  TouchableOpacity,
   StyleSheet,
+  TouchableOpacity,
+  Image,
   ScrollView,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-
-import { useJogos } from '../../hooks/useJogos';
+  Text,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { useTheme } from "../../src/contexts/themeContext";
 
 export default function JogosScreen() {
   const router = useRouter();
-  const { iniciarJogo } = useJogos();
-
-  const jogos = [
-    {
-      id: 1,
-      titulo: 'Quiz Libras',
-      descricao: 'Teste seus conhecimentos em Libras',
-      iconName: 'help-circle' as const,
-      tipo: 'Quiz Libras',
-    },
-    {
-      id: 2,
-      titulo: 'Jogo da Memória',
-      descricao: 'Combine sinais iguais',
-      iconName: 'grid' as const,
-      tipo: 'Memória',
-    },
-    {
-      id: 3,
-      titulo: 'Desafio Rápido',
-      descricao: 'Responda o mais rápido possível',
-      iconName: 'flash' as const,
-      tipo: 'Desafio',
-    },
-  ];
+  const { theme } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-
-        <View style={styles.headerSpacer} />
-      </View>
-
-      <Text style={styles.screenTitle}>Jogos</Text>
-
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView
-        contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
       >
-        <View style={styles.cardsContainer}>
-          {jogos.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.card}
-              onPress={() => iniciarJogo(item.tipo)}
-              activeOpacity={0.8}
-            >
-              <View style={styles.iconWrapper}>
-                <Ionicons name={item.iconName} size={60} color="#1E88E5" />
-              </View>
+        <Text style={[styles.subtitulo, { color: theme.text || "#333" }]}>
+          Escolha um jogo para começar
+        </Text>
 
-              <Text style={styles.cardTitulo}>{item.titulo}</Text>
-              <Text style={styles.cardDesc}>{item.descricao}</Text>
-            </TouchableOpacity>
-          ))}
+        <View style={styles.cardsContainer}>
+          <TouchableOpacity
+            style={[styles.card, { backgroundColor: theme.card }]}
+            onPress={() => router.push("/global/jogos/memoria/memoria")}
+            activeOpacity={0.8}
+          >
+            <Image
+              source={require("../../assets/images/jogos/games.png")}
+              style={styles.iconImage}
+            />
+            <Text style={[styles.cardTitle, { color: theme.text || "#333" }]}>
+              Memória
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.card, { backgroundColor: theme.card, opacity: 0.6 }]}
+            activeOpacity={1}
+          >
+            <Image
+              source={require("../../assets/images/jogos/games.png")}
+              style={styles.iconImage}
+            />
+            <Text style={[styles.cardTitle, { color: theme.text || "#333" }]}>
+              Em breve
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -80,70 +60,46 @@ export default function JogosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    paddingTop: 40,
-    paddingBottom: 10,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    padding: 4,
-  },
-  headerSpacer: {
-    width: 26,
-  },
-  screenTitle: {
-    fontSize: 30,
-    textAlign: 'center',
-    color: '#000000',
-    fontWeight: 'bold',
-    marginVertical: 15,
-  },
-  content: {
+  scrollContent: {
     paddingHorizontal: 20,
-    paddingBottom: 40,
+    paddingTop: 20,
+    paddingBottom: 120,
+  },
+  subtitulo: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 20,
+    textAlign: "center",
   },
   cardsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
-    marginTop: 40,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    rowGap: 20,
   },
   card: {
-    width: 150,
-    minHeight: 190,
+    width: "47%",
+    minHeight: 180,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 3,
-    marginBottom: 15,
-    paddingHorizontal: 12,
-    paddingVertical: 16,
   },
-  iconWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
+  iconImage: {
+    width: 90,
+    height: 90,
+    resizeMode: "contain",
+    marginBottom: 12,
   },
-  cardTitulo: {
+  cardTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#000000',
-  },
-  cardDesc: {
-    fontSize: 14,
-    color: '#666666',
-    textAlign: 'center',
-    marginTop: 4,
+    fontWeight: "700",
+    textAlign: "center",
+    paddingHorizontal: 10,
   },
 });

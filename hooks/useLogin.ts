@@ -1,11 +1,13 @@
-import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const useLogin = () => {
-  const router = useRouter();
+type ResultadoLogin = {
+  sucesso: boolean;
+  destino?: string;
+};
 
+export const useLogin = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState({ email: false, senha: false });
@@ -49,7 +51,7 @@ export const useLogin = () => {
   const emailValido = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const validarESubmeter = async () => {
+  const validarESubmeter = async (): Promise<ResultadoLogin> => {
     resetarErro();
 
     let temErro = false;
@@ -77,7 +79,7 @@ export const useLogin = () => {
 
     if (temErro) {
       dispararErro();
-      return;
+      return { sucesso: false };
     }
 
     try {
@@ -95,22 +97,21 @@ export const useLogin = () => {
       if (response.status === 400 || response.status === 401) {
         setErroGeral(data.message || 'E-mail ou senha inválidos');
         dispararErro();
-        return;
+        return { sucesso: false };
       }
 
       if (!response.ok) {
         setErroGeral(data.message || 'Erro ao fazer login');
         dispararErro();
-        return;
+        return { sucesso: false };
       }
 
-      // ✅ SALVA TOKEN E ROLE
       if (data.token) {
         await AsyncStorage.setItem('token', data.token);
       }
+
       await AsyncStorage.setItem('role', data.role || 'USER');
 
-      // ✅ SALVA USUÁRIO COMPLETO NO DEVICE
       const usuarioParaSalvar = {
         id: data.id,
         nome: data.nome,
@@ -118,17 +119,20 @@ export const useLogin = () => {
       };
       await AsyncStorage.setItem('user', JSON.stringify(usuarioParaSalvar));
 
-      // ✅ REDIRECIONA PARA HOME OU ADMIN
       const destino =
         data.role === 'ADMIN'
           ? '/global/admin'
           : '/global/home';
-      router.replace(destino);
 
+      return {
+        sucesso: true,
+        destino,
+      };
     } catch (error) {
       console.error('🔥 ERRO REAL LOGIN:', error);
       setErroGeral('Falha na conexão com o servidor');
       dispararErro();
+      return { sucesso: false };
     }
   };
 

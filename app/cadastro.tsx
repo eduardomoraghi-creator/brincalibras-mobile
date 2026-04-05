@@ -51,11 +51,11 @@ function CadastroContent({ router }: { router: ReturnType<typeof useRouter> }) {
 
         <View style={styles.logoContainer}>
           <Image
-            source={require('../assets/images/homeLight/mao.png')}
+            source={require('../assets/images/home/mao.png')}
             style={styles.logoMao}
           />
           <Image
-            source={require('../assets/images/homeLight/BrincaLibras.png')}
+            source={require('../assets/images/home/BrincaLibras.png')}
             style={styles.logoTexto}
           />
         </View>

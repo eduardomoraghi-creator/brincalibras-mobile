@@ -1,25 +1,24 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useTheme, ThemeProvider } from "../../src/contexts/themeContext";
 
 const global_HEIGHT = 70;
+const FOOTER_OFFSET = 8;
 
 function LayoutContent() {
   const { theme, darkMode, toggleDarkMode } = useTheme();
   const router = useRouter();
   const segments = useSegments() as string[];
+  const insets = useSafeAreaInsets();
 
   const rotaAtual = segments[segments.length - 1];
   const isHome = rotaAtual === "home";
-  const isSuporte = rotaAtual === "suporte";
-
-  // 🔥 NOVO: mostrar botão também na Home
-  const mostrarDarkMode =
-    rotaAtual === "suporte" ||
-    rotaAtual === "home";
 
   const handleVoltar = () => {
     try {
@@ -43,30 +42,34 @@ function LayoutContent() {
         return "Alfabeto";
       case "suporte":
         return "Suporte";
+      case "familia":
+        return "Familia";
+      case "memoria":
+        return "Memoria";
       default:
-        return rotaAtual?.toUpperCase();
+        return rotaAtual;
     }
   };
 
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.background }]}
-      edges={["top", "bottom"]}
+      edges={["top"]}
     >
-      {/* 🔹 HEADER */}
+      {/* HEADER */}
       {isHome ? (
         <View style={[styles.header, { backgroundColor: theme.background }]}>
           <View style={{ width: 20 }} />
 
           <View style={styles.logoContainer}>
             <Image
-              source={require("../../assets/images/homeLight/mao.png")}
+              source={require("../../assets/images/home/mao.png")}
               style={styles.logoMao}
             />
 
             <View style={styles.logoTextoWrapper}>
               <Image
-                source={require("../../assets/images/homeLight/BrincaLibras.png")}
+                source={require("../../assets/images/home/BrincaLibras.png")}
                 style={styles.logoTexto}
               />
             </View>
@@ -87,18 +90,26 @@ function LayoutContent() {
         </View>
       )}
 
-      {/* 🔹 CONTEÚDO */}
-      <View style={[styles.content, { marginBottom: global_HEIGHT }]}>
+      {/* CONTEÚDO */}
+      <View
+        style={[
+          styles.content,
+          {
+            marginBottom: global_HEIGHT + insets.bottom + FOOTER_OFFSET,
+          },
+        ]}
+      >
         <Slot />
       </View>
 
-      {/* 🔹 FOOTER GLOBAL */}
+      {/* FOOTER */}
       <View
         style={[
           styles.global,
           {
             backgroundColor: theme.footer,
-            borderTopColor: theme.border || "#ccc",
+            height: global_HEIGHT,
+            bottom: insets.bottom + FOOTER_OFFSET,
           },
         ]}
       >
@@ -118,17 +129,15 @@ function LayoutContent() {
           <Ionicons name="help-circle" size={35} color={theme.icon} />
         </TouchableOpacity>
 
-        {/* 🔥 BOTÃO DARK MODE NA MESMA LINHA */}
-        {mostrarDarkMode && (
-          <TouchableOpacity onPress={toggleDarkMode}>
-            <FontAwesome5
-              name={darkMode ? "sun" : "moon"}
-              size={30}
-              color={theme.icon}
-              solid
-            />
-          </TouchableOpacity>
-        )}
+        {/* 🔥 BOTÃO SEM CONDIÇÃO (SEMPRE VISÍVEL) */}
+        <TouchableOpacity onPress={toggleDarkMode}>
+          <FontAwesome5
+            name={darkMode ? "sun" : "moon"}
+            size={30}
+            color={theme.icon}
+            solid
+          />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -146,8 +155,8 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
 
   header: {
-    paddingTop: 15,
-    paddingBottom: 30,
+    paddingTop: 5,
+    paddingBottom: 20,
     paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -160,8 +169,8 @@ const styles = StyleSheet.create({
   },
 
   logoMao: {
-    width: 60,
-    height: 60,
+    width: 55,
+    height: 55,
     marginRight: 10,
   },
 
@@ -208,12 +217,16 @@ const styles = StyleSheet.create({
 
   global: {
     position: "absolute",
-    bottom: 0,
     width: "100%",
-    height: global_HEIGHT,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    borderTopWidth: 0.5,
+
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -3 },
+
+    elevation: 12,
   },
 });
