@@ -95,7 +95,7 @@ const lightTheme: Theme = {
   inputPlaceholder: "#8E8E8E",
   inputBorder: "#D9E2EC",
 
-  button: "#3A8FB7",
+  button: "#2D9CDB",
   buttonText: "#FFFFFF",
 
   secondaryButton: "#5C677D",
@@ -116,7 +116,7 @@ const darkTheme: Theme = {
   background: "#2F2F2F",
   surface: "#3A3A3A",
   surfaceAlt: "#454545",
-  header: "#3A8FB7",
+  header: "#2D9CDB",
   footer: "#3F3F3F",
   curve: "#5DADE2",
   banner: "#880E4F",

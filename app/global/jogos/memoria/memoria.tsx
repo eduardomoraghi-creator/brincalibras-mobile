@@ -16,14 +16,14 @@ import {
 } from "react-native";
 
 import { useTheme } from "../../../../src/contexts/themeContext";
-import {
-  getRandomLibrasSymbols,
-  shuffleArray,
-} from "../../../../src/data/librasHelpers";
-import { LibrasSymbol } from "../../../../src/data/librasSymbols";
 
-type BaseItem = LibrasSymbol;
 type CardType = "name" | "sign";
+
+type BaseItem = {
+  id: string;
+  palavra: string;
+  imagem: ImageSourcePropType;
+};
 
 type CardData = {
   id: string;
@@ -40,9 +40,142 @@ type Level = "easy" | "medium" | "hard";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const HORIZONTAL_PADDING = 16;
 const GRID_GAP = 2;
-const PREVIEW_DURATION_MS = 3000;
+const PREVIEW_DURATION_MS = 2000;
 
 const HAND_IMAGE = require("../../../../src/assets/images/mao.png");
+
+const LETTER_IMAGES: BaseItem[] = [
+  {
+    id: "a",
+    palavra: "A",
+    imagem: require("../../../../src/assets/images/letras/a.jpg"),
+  },
+  {
+    id: "b",
+    palavra: "B",
+    imagem: require("../../../../src/assets/images/letras/b.jpg"),
+  },
+  {
+    id: "c",
+    palavra: "C",
+    imagem: require("../../../../src/assets/images/letras/c.jpg"),
+  },
+  {
+    id: "d",
+    palavra: "D",
+    imagem: require("../../../../src/assets/images/letras/d.jpg"),
+  },
+  {
+    id: "e",
+    palavra: "E",
+    imagem: require("../../../../src/assets/images/letras/e.jpg"),
+  },
+  {
+    id: "f",
+    palavra: "F",
+    imagem: require("../../../../src/assets/images/letras/f.jpg"),
+  },
+  {
+    id: "g",
+    palavra: "G",
+    imagem: require("../../../../src/assets/images/letras/g.jpg"),
+  },
+  {
+    id: "h",
+    palavra: "H",
+    imagem: require("../../../../src/assets/images/letras/h.jpg"),
+  },
+  {
+    id: "i",
+    palavra: "I",
+    imagem: require("../../../../src/assets/images/letras/i.jpg"),
+  },
+  {
+    id: "j",
+    palavra: "J",
+    imagem: require("../../../../src/assets/images/letras/j.jpg"),
+  },
+  {
+    id: "k",
+    palavra: "K",
+    imagem: require("../../../../src/assets/images/letras/k.jpg"),
+  },
+  {
+    id: "l",
+    palavra: "L",
+    imagem: require("../../../../src/assets/images/letras/l.jpg"),
+  },
+  {
+    id: "m",
+    palavra: "M",
+    imagem: require("../../../../src/assets/images/letras/m.jpg"),
+  },
+  {
+    id: "n",
+    palavra: "N",
+    imagem: require("../../../../src/assets/images/letras/n.jpg"),
+  },
+  {
+    id: "o",
+    palavra: "O",
+    imagem: require("../../../../src/assets/images/letras/o.jpg"),
+  },
+  {
+    id: "p",
+    palavra: "P",
+    imagem: require("../../../../src/assets/images/letras/p.jpg"),
+  },
+  {
+    id: "q",
+    palavra: "Q",
+    imagem: require("../../../../src/assets/images/letras/q.jpg"),
+  },
+  {
+    id: "r",
+    palavra: "R",
+    imagem: require("../../../../src/assets/images/letras/r.jpg"),
+  },
+  {
+    id: "s",
+    palavra: "S",
+    imagem: require("../../../../src/assets/images/letras/s.jpg"),
+  },
+  {
+    id: "t",
+    palavra: "T",
+    imagem: require("../../../../src/assets/images/letras/t.jpg"),
+  },
+  {
+    id: "u",
+    palavra: "U",
+    imagem: require("../../../../src/assets/images/letras/u.jpg"),
+  },
+  {
+    id: "v",
+    palavra: "V",
+    imagem: require("../../../../src/assets/images/letras/v.jpg"),
+  },
+  {
+    id: "w",
+    palavra: "W",
+    imagem: require("../../../../src/assets/images/letras/w.jpg"),
+  },
+  {
+    id: "x",
+    palavra: "X",
+    imagem: require("../../../../src/assets/images/letras/x.jpg"),
+  },
+  {
+    id: "y",
+    palavra: "Y",
+    imagem: require("../../../../src/assets/images/letras/y.jpg"),
+  },
+  {
+    id: "z",
+    palavra: "Z",
+    imagem: require("../../../../src/assets/images/letras/z.jpg"),
+  },
+];
 
 const LEVEL_CONFIG: Record<
   Level,
@@ -53,12 +186,27 @@ const LEVEL_CONFIG: Record<
   hard: { columns: 3, pairs: 16, label: "Difícil" },
 };
 
+function shuffleArray<T>(array: T[]): T[] {
+  const copied = [...array];
+
+  for (let i = copied.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copied[i], copied[j]] = [copied[j], copied[i]];
+  }
+
+  return copied;
+}
+
+function getRandomLetterSymbols(limit: number): BaseItem[] {
+  return shuffleArray(LETTER_IMAGES).slice(
+    0,
+    Math.min(limit, LETTER_IMAGES.length)
+  );
+}
+
 function buildDeck(level: Level): CardData[] {
   const { pairs } = LEVEL_CONFIG[level];
-  const allItems = getRandomLibrasSymbols(999);
-
-  const safeItems = allItems.filter((item) => !!item.imagem);
-  const selectedPairs = safeItems.slice(0, Math.min(pairs, safeItems.length));
+  const selectedPairs = getRandomLetterSymbols(pairs);
 
   const deck = selectedPairs.flatMap((item) => {
     const wordCard: CardData = {
@@ -104,9 +252,7 @@ type MemoryCardProps = {
     cardFrontBorder: string;
     cardMatched: string;
     cardMatchedBorder: string;
-    signBadge: string;
     signMissing: string;
-    wordHint: string;
     wordLabel: string;
     shadow: string;
   };
@@ -192,7 +338,7 @@ function MemoryCard({
             <Text style={styles.cardBackIcon}>🔤</Text>
           )}
           <Text style={styles.cardBackLabel}>
-            {isSign ? "LIBRAS" : "PALAVRA"}
+            {isSign ? "LIBRAS" : "LETRA"}
           </Text>
         </Animated.View>
 
@@ -215,15 +361,15 @@ function MemoryCard({
           ]}
         >
           {isSign ? (
-            <View style={styles.signContent}>
-              <Text style={[styles.signBadge, { color: colors.signBadge }]}>
-                LIBRAS
+            <View style={styles.signFullContainer}>
+              <Text style={[styles.signLetterLabel, { color: colors.wordLabel }]}>
+                {card.word}
               </Text>
 
               {card.signalAsset ? (
                 <Image
                   source={card.signalAsset}
-                  style={styles.signImage}
+                  style={styles.signFullImage}
                   resizeMode="contain"
                 />
               ) : (
@@ -233,10 +379,6 @@ function MemoryCard({
                   Imagem não encontrada
                 </Text>
               )}
-
-              <Text style={[styles.wordHint, { color: colors.wordHint }]}>
-                {card.word}
-              </Text>
             </View>
           ) : (
             <View style={styles.imageContent}>
@@ -275,7 +417,7 @@ export default function MemoriaJogo() {
       shadow: "#000000",
       danger: darkMode ? "#FF8A80" : "#B00020",
     }),
-    [theme, darkMode],
+    [theme, darkMode]
   );
 
   const [level, setLevel] = useState<Level>("easy");
@@ -285,7 +427,7 @@ export default function MemoriaJogo() {
   const [moves, setMoves] = useState(0);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState(
-    "Encontre os pares entre a palavra e o símbolo em Libras.",
+    "Encontre os pares entre a palavra e o símbolo em Libras."
   );
   const [isBoardLocked, setIsBoardLocked] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
@@ -389,7 +531,7 @@ export default function MemoriaJogo() {
     Alert.alert(
       "Parabéns! 🎉",
       `Você terminou o nível ${LEVEL_CONFIG[level].label} com ${score} pontos em ${moves} jogadas.`,
-      [{ text: "OK" }],
+      [{ text: "OK" }]
     );
   };
 
@@ -443,8 +585,8 @@ export default function MemoriaJogo() {
           prev.map((item) =>
             item.id === firstId || item.id === secondId
               ? { ...item, matched: true }
-              : item,
-          ),
+              : item
+          )
         );
         setMatchedCount((prev) => prev + 1);
         setScore((prev) => prev + 10);
@@ -644,9 +786,7 @@ export default function MemoriaJogo() {
                 cardFrontBorder: colors.cardFrontBorder,
                 cardMatched: colors.matched,
                 cardMatchedBorder: colors.matchedBorder,
-                signBadge: colors.primary,
                 signMissing: colors.danger,
-                wordHint: colors.textSecondary,
                 wordLabel: colors.text,
                 shadow: colors.shadow,
               }}
@@ -707,17 +847,27 @@ export default function MemoriaJogo() {
           <View
             style={[styles.previewBox, { backgroundColor: colors.previewBox }]}
           >
-            {previewCard?.signalAsset ? (
-              <Image
-                source={previewCard.signalAsset}
-                style={styles.previewImage}
-                resizeMode="contain"
-              />
-            ) : null}
+            {previewCard ? (
+              <>
+                <Text style={[styles.previewLetter, { color: colors.text }]}>
+                  {previewCard.word}
+                </Text>
 
-            <Text style={[styles.previewHint, { color: colors.textSecondary }]}>
-              A imagem será fechada automaticamente
-            </Text>
+                {previewCard.signalAsset ? (
+                  <Image
+                    source={previewCard.signalAsset}
+                    style={styles.previewImage}
+                    resizeMode="contain"
+                  />
+                ) : null}
+
+                <Text
+                  style={[styles.previewHint, { color: colors.textSecondary }]}
+                >
+                  A imagem será fechada automaticamente
+                </Text>
+              </>
+            ) : null}
           </View>
         </View>
       </Modal>
@@ -895,6 +1045,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     elevation: 3,
     borderWidth: 2,
+    overflow: "hidden",
   },
 
   cardBackImage: {
@@ -926,24 +1077,25 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-  signContent: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 8,
+  signFullContainer: {
     width: "100%",
     height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 6,
+    paddingHorizontal: 4,
   },
 
-  signBadge: {
-    fontSize: 12,
+  signLetterLabel: {
+    fontSize: 18,
     fontWeight: "800",
-    marginBottom: 6,
+    marginBottom: 4,
+    textAlign: "center",
   },
 
-  signImage: {
-    width: "130%",
-    height: "130%",
-    marginBottom: 6,
+  signFullImage: {
+    width: "100%",
+    height: "75%",
   },
 
   signMissing: {
@@ -951,13 +1103,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     paddingHorizontal: 8,
-  },
-
-  wordHint: {
-    marginTop: 2,
-    fontSize: 14,
-    textAlign: "center",
-    fontWeight: "700",
   },
 
   imageContent: {
@@ -1031,6 +1176,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 18,
     alignItems: "center",
+  },
+
+  previewLetter: {
+    fontSize: 40,
+    fontWeight: "800",
+    marginBottom: 12,
+    textAlign: "center",
   },
 
   previewImage: {

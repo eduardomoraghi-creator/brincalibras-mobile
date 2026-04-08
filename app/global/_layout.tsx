@@ -5,7 +5,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { Slot, useRouter, useSegments } from "expo-router";
-import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useTheme, ThemeProvider } from "../../src/contexts/themeContext";
 
 const global_HEIGHT = 70;
@@ -18,7 +18,9 @@ function LayoutContent() {
   const insets = useSafeAreaInsets();
 
   const rotaAtual = segments[segments.length - 1];
-  const isHome = rotaAtual === "home";
+
+  // 🔥 NOVA REGRA AQUI
+  const semHeader = ["home", "familia", "atividade1", "aula2", "atividade2", "introducao", "atividades", "jogos"].includes(rotaAtual);
 
   const handleVoltar = () => {
     try {
@@ -46,8 +48,12 @@ function LayoutContent() {
         return "Familia";
       case "memoria":
         return "Memoria";
-        case "medalhas":
+      case "medalhas":
         return "Medalhas";
+      case "novidades":
+        return "Novidades";
+      case "atividadesScreen":
+        return "Atividades";
       default:
         return rotaAtual;
     }
@@ -59,26 +65,28 @@ function LayoutContent() {
       edges={["top"]}
     >
       {/* HEADER */}
-      {isHome ? (
-        <View style={[styles.header, { backgroundColor: theme.background }]}>
-          <View style={{ width: 20 }} />
+      {semHeader ? (
+        rotaAtual === "home" ? (
+          <View style={[styles.header, { backgroundColor: theme.background }]}>
+            <View style={{ width: 20 }} />
 
-          <View style={styles.logoContainer}>
-            <Image
-              source={require("../../src/assets/images/home/mao.png")}
-              style={styles.logoMao}
-            />
-
-            <View style={styles.logoTextoWrapper}>
+            <View style={styles.logoContainer}>
               <Image
-                source={require("../../src/assets/images/home/BrincaLibras.png")}
-                style={styles.logoTexto}
+                source={require("../../src/assets/images/home/mao.png")}
+                style={styles.logoMao}
               />
-            </View>
-          </View>
 
-          <View style={{ width: 26 }} />
-        </View>
+              <View style={styles.logoTextoWrapper}>
+                <Image
+                  source={require("../../src/assets/images/home/BrincaLibras.png")}
+                  style={styles.logoTexto}
+                />
+              </View>
+            </View>
+
+            <View style={{ width: 26 }} />
+          </View>
+        ) : null
       ) : (
         <View style={styles.headerInterno}>
           <Text style={styles.titulo}>{getTitulo()}</Text>
@@ -126,7 +134,7 @@ function LayoutContent() {
               width: 35,
               height: 35,
               resizeMode: "contain",
-              tintColor: theme.icon, // opcional (explico abaixo)
+              tintColor: theme.icon,
             }}
           />
         </TouchableOpacity>
@@ -139,7 +147,6 @@ function LayoutContent() {
           <Ionicons name="help-circle" size={35} color={theme.icon} />
         </TouchableOpacity>
 
-        {/* 🔥 BOTÃO SEM CONDIÇÃO (SEMPRE VISÍVEL) */}
         <TouchableOpacity onPress={toggleDarkMode}>
           <FontAwesome5
             name={darkMode ? "sun" : "moon"}
@@ -201,7 +208,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#2D9CDB",
     paddingTop: 10,
     paddingBottom: 10,
-    paddingHorizontal: 2,
+    paddingLeft: 20,
+    paddingRight: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -211,6 +219,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 25,
     fontWeight: "600",
+    marginLeft: 4,
   },
 
   arrow: {
@@ -221,6 +230,7 @@ const styles = StyleSheet.create({
 
   backButton: {
     padding: 8,
+    marginRight: -6,
   },
 
   content: { flex: 1 },

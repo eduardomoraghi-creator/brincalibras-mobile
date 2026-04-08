@@ -16,7 +16,7 @@ export function getAllLibrasSymbols(): LibrasSymbol[] {
 }
 
 export function getDictionaryItems(): LibrasSymbol[] {
-  return LIBRAS_SYMBOLS.filter((item) => item.estatico);
+  return LIBRAS_SYMBOLS.filter((item) => item.categoria === "palavra");
 }
 
 export function getRandomLibrasSymbols(quantity: number): LibrasSymbol[] {

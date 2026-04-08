@@ -7,11 +7,21 @@ type ResultadoLogin = {
   destino?: string;
 };
 
+type ErrosLogin = {
+  email: boolean;
+  senha: boolean;
+};
+
+type MensagensLogin = {
+  email?: string;
+  senha?: string;
+};
+
 export const useLogin = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [erro, setErro] = useState({ email: false, senha: false });
-  const [mensagens, setMensagens] = useState<any>({});
+  const [erro, setErro] = useState<ErrosLogin>({ email: false, senha: false });
+  const [mensagens, setMensagens] = useState<MensagensLogin>({});
   const [erroGeral, setErroGeral] = useState('');
 
   const focusAnimEmail = useRef(new Animated.Value(0)).current;
@@ -48,21 +58,21 @@ export const useLogin = () => {
     setErroGeral('');
   };
 
-  const emailValido = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const emailValido = (valor: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
 
   const validarESubmeter = async (): Promise<ResultadoLogin> => {
     resetarErro();
 
     let temErro = false;
-    const novoErro = { email: false, senha: false };
-    const novasMensagens: any = {};
+    const novoErro: ErrosLogin = { email: false, senha: false };
+    const novasMensagens: MensagensLogin = {};
 
     if (!email.trim()) {
       novoErro.email = true;
       novasMensagens.email = 'E-mail é obrigatório';
       temErro = true;
-    } else if (!emailValido(email)) {
+    } else if (!emailValido(email.trim())) {
       novoErro.email = true;
       novasMensagens.email = 'Digite um e-mail válido';
       temErro = true;
@@ -87,12 +97,17 @@ export const useLogin = () => {
         'https://brincalibras-api.onrender.com/users/login',
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, senha }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            senha,
+          }),
         }
       );
 
-      const data: any = await response.json();
+      const data = await response.json();
 
       if (response.status === 400 || response.status === 401) {
         setErroGeral(data.message || 'E-mail ou senha inválidos');
@@ -117,12 +132,11 @@ export const useLogin = () => {
         nome: data.nome,
         email: data.email,
       };
+
       await AsyncStorage.setItem('user', JSON.stringify(usuarioParaSalvar));
 
       const destino =
-        data.role === 'ADMIN'
-          ? '/global/admin'
-          : '/global/home';
+        data.role === 'ADMIN' ? '/global/admin' : '/global/home';
 
       return {
         sucesso: true,

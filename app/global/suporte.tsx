@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   },
 
   searchBox: {
-    borderRadius: 30,
+    borderRadius: 15,
     paddingHorizontal: 15,
     height: 45,
     flexDirection: "row",
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 14,
-    borderRadius: 999,
+    borderRadius: 15,
     gap: 8,
   },
 
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "88%",
     paddingVertical: 14,
-    borderRadius: 999,
+    borderRadius: 15,
     flexDirection: "row",
     justifyContent: "center",
     gap: 10,

@@ -15,15 +15,17 @@
         "NSPhotoLibraryUsageDescription": "O app precisa acessar sua galeria para escolher uma foto de perfil."
       }
     },
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2D9CDB"
+    },
+
     "android": {
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.brincalibras.app",
-      "permissions": [
-        "INTERNET",
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE"
-      ],
+      "permissions": ["INTERNET", "CAMERA", "READ_EXTERNAL_STORAGE"],
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#2D9CDB"

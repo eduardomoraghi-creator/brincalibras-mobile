@@ -11,7 +11,7 @@ export function useSuporte() {
   const router = useRouter();
 
   const telefone = "5511111111111";
-  const email = "sac@brincalibras.com.br";
+  const email = "brincalibras@gmail.com";
 
   const [darkMode, setDarkMode] = useState(false);
   const [mostrarMais, setMostrarMais] = useState(false);
@@ -83,7 +83,7 @@ export function useSuporte() {
     if (supported) {
       Linking.openURL(url);
     } else {
-      Alert.alert("Erro", "WhatsApp não disponível");
+      Alert.alert("Whatsapp", "Disponível em breve");
     }
   };
 

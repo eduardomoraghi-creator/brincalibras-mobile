@@ -1,86 +1,48 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   FlatList,
-  Image,
   Dimensions,
   TouchableOpacity,
   Modal,
-  Animated,
+  Text,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 import { useTheme } from "../../src/contexts/themeContext";
 import { useDicionario } from "../../hooks/useDicionario";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 const HORIZONTAL_PADDING = 20;
 const GAP = 12;
-const CARD_WIDTH = (width - HORIZONTAL_PADDING * 2 - GAP) / 2;
+const BUTTON_WIDTH = (width - HORIZONTAL_PADDING * 2 - GAP) / 2;
 
 type ItemDicionario = {
   id: string;
-  imagem: any;
-  descricao: string;
+  palavra: string;
+  videoId?: string;
+  tipo: "imagem" | "youtube";
 };
 
 export default function DicionarioScreen() {
   const { theme } = useTheme();
-
   const { busca, setBusca, dadosFiltrados, navegarPorBusca } = useDicionario();
+  const router = useRouter();
 
-  const [modalVisivel, setModalVisivel] = useState(false);
-  const [itemSelecionado, setItemSelecionado] =
-    useState<ItemDicionario | null>(null);
+  const [videoSelecionado, setVideoSelecionado] = useState<string | null>(null);
 
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const hintOpacity = useRef(new Animated.Value(0)).current;
-  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
-
-  const limparTimers = () => {
-    timersRef.current.forEach(clearTimeout);
-    timersRef.current = [];
+  const abrirVideo = (item: ItemDicionario) => {
+    if (item.tipo === "youtube" && item.videoId) {
+      setVideoSelecionado(item.videoId);
+    }
   };
 
-  const fecharModal = () => {
-    limparTimers();
-    setModalVisivel(false);
-    setItemSelecionado(null);
-    scaleAnim.setValue(1);
-    hintOpacity.setValue(0);
-  };
-
-  const abrirCardTelaCheia = (item: ItemDicionario) => {
-    limparTimers();
-    setItemSelecionado(item);
-    setModalVisivel(true);
-    scaleAnim.setValue(1);
-    hintOpacity.setValue(0);
-
-    const reduzirTimer = setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(scaleAnim, {
-          toValue: 0.52,
-          duration: 700,
-          useNativeDriver: true,
-        }),
-        Animated.timing(hintOpacity, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }, 3000);
-
-    const fecharTimer = setTimeout(() => {
-      fecharModal();
-    }, 4500);
-
-    timersRef.current.push(reduzirTimer, fecharTimer);
+  const fecharVideo = () => {
+    setVideoSelecionado(null);
   };
 
   return (
@@ -105,7 +67,7 @@ export default function DicionarioScreen() {
 
               <TextInput
                 style={[styles.searchInput, { color: theme.inputText }]}
-                placeholder="Ex: casa, amor, escola..."
+                placeholder="Ex: casa"
                 placeholderTextColor={theme.inputPlaceholder}
                 value={busca}
                 onChangeText={setBusca}
@@ -122,63 +84,58 @@ export default function DicionarioScreen() {
           numColumns={2}
           columnWrapperStyle={styles.row}
           contentContainerStyle={styles.listContent}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => abrirCardTelaCheia(item)}
-                style={[
-                  styles.card,
-                  {
-                    width: CARD_WIDTH,
-                    backgroundColor: theme.card,
-                    borderColor: theme.cardBorder,
-                  },
-                ]}
-              >
-                <Image source={item.imagem} style={styles.image} />
-
-                <Text
-                  style={[styles.descricao, { color: theme.textOnCard }]}
-                  numberOfLines={3}
-                >
-                  {item.descricao}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              activeOpacity={0.85}
+              onPress={() => abrirVideo(item)}
+              style={[
+                styles.botaoPalavra,
+                {
+                  width: BUTTON_WIDTH,
+                  backgroundColor: "#2D9CDB",
+                  borderColor: "#2D9CDB",
+                },
+              ]}
+            >
+              <Text style={styles.botaoPalavraTexto}>{item.palavra}</Text>
+            </TouchableOpacity>
+          )}
         />
 
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() => router.push("/global/alfabeto")}
+          style={styles.botaoFlutuante}
+        >
+          <Ionicons name="book" size={22} color="#FFFFFF" />
+          <Text style={styles.botaoFlutuanteTexto}>Alfabeto</Text>
+        </TouchableOpacity>
+
         <Modal
-          visible={modalVisivel}
-          transparent
+          visible={!!videoSelecionado}
           animationType="fade"
-          onRequestClose={fecharModal}
+          transparent
+          onRequestClose={fecharVideo}
         >
           <View style={styles.modalOverlay}>
-            {itemSelecionado && (
-              <Animated.View
-                style={[
-                  styles.modalCard,
-                  {
-                    transform: [{ scale: scaleAnim }],
-                    backgroundColor: theme.card,
-                  },
-                ]}
-              >
-                <Image
-                  source={itemSelecionado.imagem}
-                  style={styles.modalImagem}
-                  resizeMode="contain"
-                />
+            <TouchableOpacity
+              style={styles.botaoFechar}
+              onPress={fecharVideo}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="close" size={34} color="#FFFFFF" />
+            </TouchableOpacity>
 
-                <Text
-                  style={[styles.modalDescricao, { color: theme.textOnCard }]}
-                >
-                  {itemSelecionado.descricao}
-                </Text>
-              </Animated.View>
-            )}
+            <View style={styles.playerWrapper}>
+              {videoSelecionado && (
+                <YoutubePlayer
+                  key={videoSelecionado}
+                  height={width * (9 / 16)}
+                  play={false}
+                  videoId={videoSelecionado}
+                />
+              )}
+            </View>
           </View>
         </Modal>
       </View>
@@ -197,7 +154,7 @@ const styles = StyleSheet.create({
   },
 
   searchBox: {
-    borderRadius: 30,
+    borderRadius: 15,
     paddingHorizontal: 15,
     height: 45,
     flexDirection: "row",
@@ -213,7 +170,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingTop: 22,
     paddingHorizontal: HORIZONTAL_PADDING,
-    paddingBottom: 20,
+    paddingBottom: 100,
   },
 
   row: {
@@ -221,58 +178,69 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  card: {
+  botaoPalavra: {
+    minHeight: 58,
     borderWidth: 1,
-    borderRadius: 10,
-    padding: 6,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 14,
   },
 
-  image: {
-    width: "100%",
-    height: CARD_WIDTH - 12,
-    resizeMode: "contain",
-    marginBottom: 6,
+  botaoPalavraTexto: {
+    fontSize: 16,
+    fontWeight: "700",
+    textAlign: "center",
+    color: "#FFFFFF",
   },
 
-  descricao: {
-    fontSize: 13,
-    lineHeight: 18,
+  botaoFlutuante: {
+    position: "absolute",
+    right: 20,
+    bottom: 25,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#27AE60",
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 30,
+    elevation: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+
+  botaoFlutuanteTexto: {
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontWeight: "700",
+    marginLeft: 8,
   },
 
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.88)",
+    backgroundColor: "rgba(0,0,0,0.92)",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
   },
 
-  modalCard: {
-    width: width - 30,
-    height: height * 0.78,
-    borderRadius: 22,
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
+  botaoFechar: {
+    position: "absolute",
+    top: 45,
+    right: 20,
+    zIndex: 10,
+    padding: 6,
   },
 
-  modalImagem: {
+  playerWrapper: {
     width: "100%",
-    height: "78%",
-    marginBottom: 18,
-  },
-
-  modalDescricao: {
-    fontSize: 22,
-    lineHeight: 30,
-    textAlign: "center",
-    fontWeight: "600",
-  },
-
-  textoFechamento: {
-    marginTop: 20,
-    fontSize: 16,
-    textAlign: "center",
-    paddingHorizontal: 24,
+    aspectRatio: 16 / 9,
+    backgroundColor: "#000",
+    borderRadius: 12,
+    overflow: "hidden",
+    justifyContent: "center",
   },
 });

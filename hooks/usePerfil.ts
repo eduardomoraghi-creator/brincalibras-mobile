@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Animated } from "react-native";
+import { Animated, Linking } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type Usuario = {
@@ -23,6 +23,7 @@ type ResultadoFeedback = {
 
 const API_URL = "https://brincalibras-api.onrender.com/users";
 const STORAGE_KEY = "user";
+const FEEDBACK_EMAIL = "brincalibras@gmail.com";
 
 export const usePerfil = () => {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
@@ -383,16 +384,43 @@ export const usePerfil = () => {
       return { sucesso: false };
     }
 
-    setLoading(true);
-
     try {
+      setLoading(true);
+
+      const assunto = "Feedback do aplicativo BrincaLibras";
+      const remetente = usuario?.email?.trim()
+        ? `\n\nE-mail do usuário: ${usuario.email.trim()}`
+        : "";
+      const nomeUsuario = usuario?.nome?.trim()
+        ? `\nNome do usuário: ${usuario.nome.trim()}`
+        : "";
+
+      const corpo = `${texto}${nomeUsuario}${remetente}`;
+
+      const url = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(
+        assunto,
+      )}&body=${encodeURIComponent(corpo)}`;
+
+      const podeAbrir = await Linking.canOpenURL(url);
+
+      if (!podeAbrir) {
+        setFeedbackErro("Não foi possível abrir o aplicativo de e-mail");
+        return { sucesso: false };
+      }
+
+      await Linking.openURL(url);
+
       setFeedback("");
       setFeedbackErro("");
+
       return { sucesso: true };
+    } catch {
+      setFeedbackErro("Erro ao tentar enviar o feedback");
+      return { sucesso: false };
     } finally {
       setLoading(false);
     }
-  }, [feedback]);
+  }, [feedback, usuario]);
 
   return {
     usuario,
